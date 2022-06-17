@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import Login from "./components/Auth/Login";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Selny E-Commerce</Text>
       <StatusBar style="auto" />
+      <Login />
     </View>
   );
 }
