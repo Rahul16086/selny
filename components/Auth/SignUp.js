@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, Pressable } from "react-native";
 import { styles } from "./Login";
 
 const SignUp = (props) => {
@@ -12,12 +12,19 @@ const SignUp = (props) => {
       <TextInput style={styles.textInput}></TextInput>
       <Text style={styles.fonts}>Confirm Password</Text>
       <TextInput style={styles.textInput}></TextInput>
-      <TouchableOpacity style={styles.buttonTouch}>
+      <Pressable
+        style={styles.buttonTouch}
+        android_ripple={{ color: "#ffffff" }}
+      >
         <Text style={styles.fonts}>Create account</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonTouch} onPress={props.onBack}>
+      </Pressable>
+      <Pressable
+        style={styles.buttonTouch}
+        onPress={props.onBack}
+        android_ripple={{ color: "#ffffff" }}
+      >
         <Text style={styles.fonts}>Back</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };

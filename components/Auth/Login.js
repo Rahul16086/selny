@@ -4,7 +4,7 @@ import {
   Image,
   TextInput,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import logo from "../../assets/Logo.png";
 import googleLogo from "../../assets/Google.png";
@@ -26,23 +26,33 @@ export default function Login() {
           <TextInput style={styles.textInput}></TextInput>
           <Text style={styles.fonts}>Password</Text>
           <TextInput style={styles.textInput} secureTextEntry></TextInput>
-          <TouchableOpacity style={styles.buttonTouch}>
+          <Pressable
+            android_ripple={{ color: "#ffffff" }}
+            style={styles.buttonTouch}
+          >
             <Text style={styles.fonts}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.forgotPassword}>
+          </Pressable>
+          <Pressable
+            style={styles.forgotPassword}
+            android_ripple={{ color: "#ffffff" }}
+          >
             <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
       {!signUpClicked && (
         <View style={styles.otherSignInOptions}>
           <Text style={styles.fonts}>Sign-In Using</Text>
-          <TouchableOpacity>
+          <Pressable android_ripple={{ color: "#ffffff" }}>
             <Image source={googleLogo} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonTouch} onPress={toggleSignUp}>
+          </Pressable>
+          <Pressable
+            style={styles.buttonTouch}
+            onPress={toggleSignUp}
+            android_ripple={{ color: "#ffffff" }}
+          >
             <Text style={styles.fonts}>Create Account</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
     </View>
