@@ -4,45 +4,52 @@ import {
   Image,
   TextInput,
   StyleSheet,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import logo from "../../assets/Logo.png";
 import googleLogo from "../../assets/Google.png";
+import SignUp from "./SignUp";
+import { useState } from "react";
 
 export default function Login() {
+  const toggleSignUp = () => {
+    setSignUpClicked(() => !signUpClicked);
+  };
+  const [signUpClicked, setSignUpClicked] = useState(false);
   return (
     <View style={styles.mainContainer}>
       <Image source={logo} />
-      <View style={styles.formContainer}>
-        <Text style={styles.fonts}>Username/E-Mail</Text>
-        <TextInput style={styles.textInput}></TextInput>
-        <Text style={styles.fonts}>Password</Text>
-        <TextInput style={styles.textInput} secureTextEntry></TextInput>
-        {/*{" "}
-        <View style={styles.button}>
-          // <Button title="Login" color={"#FEB700"} />
-  //{" "}
-  </View>*/}
-        <TouchableOpacity style={styles.buttonTouch}>
-          <Text style={styles.fonts}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.forgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.otherSignInOptions}>
-        <Text style={styles.fonts}>Sign-In Using</Text>
-        <Image source={googleLogo} />
-        <TouchableOpacity style={styles.buttonTouch}>
-          <Text style={styles.fonts}>Create Account</Text>
-        </TouchableOpacity>
-      </View>
+      {signUpClicked && <SignUp onBack={toggleSignUp} />}
+      {!signUpClicked && (
+        <View style={styles.formContainer}>
+          <Text style={styles.fonts}>Username/E-Mail</Text>
+          <TextInput style={styles.textInput}></TextInput>
+          <Text style={styles.fonts}>Password</Text>
+          <TextInput style={styles.textInput} secureTextEntry></TextInput>
+          <TouchableOpacity style={styles.buttonTouch}>
+            <Text style={styles.fonts}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.forgotPassword}>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {!signUpClicked && (
+        <View style={styles.otherSignInOptions}>
+          <Text style={styles.fonts}>Sign-In Using</Text>
+          <TouchableOpacity>
+            <Image source={googleLogo} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonTouch} onPress={toggleSignUp}>
+            <Text style={styles.fonts}>Create Account</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: "90%",
@@ -58,7 +65,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     borderRadius: 10,
-    paddingVertical: 30,
+    paddingVertical: 20,
     paddingHorizontal: 15,
     width: "100%",
     marginVertical: 10,
@@ -75,6 +82,7 @@ const styles = StyleSheet.create({
   textInput: {
     borderWidth: 1,
     borderRadius: 5,
+    borderColor: "#6D6D6D",
     paddingHorizontal: 8,
     height: 50,
     width: "100%",
@@ -82,7 +90,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 18,
   },
-  // button: { width: "100%", marginTop: 10 },
   buttonTouch: {
     width: "100%",
     backgroundColor: "#FEB700",
@@ -90,11 +97,11 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 10,
   },
   forgotPassword: {
     width: "100%",
     alignItems: "center",
-    marginTop: 10,
   },
   forgotPasswordText: {
     fontSize: 14,
