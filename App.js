@@ -1,24 +1,26 @@
+import { StyleSheet, SafeAreaView, StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginSignUp from "./screens/LoginSignUp";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import { StyleSheet, StatusBar, SafeAreaView } from "react-native";
-import SellProduct from "./components/SellProduct/SellProduct";
-import Map from "./components/SellProduct/Map";
-import Login from "./components/Auth/Login";
+import Home from "./screens/Home";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
+    <>
       <ExpoStatusBar style="auto" />
-      <SellProduct />
-    </SafeAreaView>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="login"
+            component={LoginSignUp}
+            options={{ title: "Welcome" }}
+          />
+          <Stack.Screen name="home" component={Home} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: StatusBar.currentHeight,
-  },
-});

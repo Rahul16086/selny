@@ -5,10 +5,10 @@ import SignUp from "./SignUp";
 import { useState } from "react";
 import YellowButton from "../UI/Buttons/YellowButton";
 import TransparentButton from "../UI/Buttons/TransparentButton";
-import TextBold20 from "../UI/Text/TextBold20";
+import TextBold18 from "../UI/Text/TextBold18";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 
-const Login = () => {
+const Login = ({ navigation }) => {
   const toggleSignUp = () => {
     setSignUpClicked(() => !signUpClicked);
   };
@@ -19,17 +19,23 @@ const Login = () => {
       {signUpClicked && <SignUp onBack={toggleSignUp} />}
       {!signUpClicked && (
         <View style={styles.formContainer}>
-          <TextBold20>Username/E-Mail</TextBold20>
+          <TextBold18>Username/E-Mail</TextBold18>
           <TextInputGrey />
-          <TextBold20>Password</TextBold20>
+          <TextBold18>Password</TextBold18>
           <TextInputGrey secureTextEntry />
-          <YellowButton>Login</YellowButton>
+          <YellowButton
+            onPress={() => {
+              navigation.replace("home");
+            }}
+          >
+            Login
+          </YellowButton>
           <TransparentButton>Forgot Password?</TransparentButton>
         </View>
       )}
       {!signUpClicked && (
         <View style={styles.otherSignInOptions}>
-          <TextBold20>Sign-In Using</TextBold20>
+          <TextBold18>Sign-In Using</TextBold18>
           <Pressable android_ripple={{ color: "#ffffff" }}>
             <Image source={googleLogo} />
           </Pressable>
@@ -43,9 +49,9 @@ const Login = () => {
 export const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    width: "90%",
     justifyContent: "center",
     alignItems: "center",
+    padding: 10,
   },
   formContainer: {
     borderRadius: 10,

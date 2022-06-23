@@ -1,6 +1,6 @@
 import { Text, StyleSheet } from "react-native";
 
-const TextBold20 = ({ onPress, children }) => {
+const TextBold18 = ({ onPress, children }) => {
   return (
     <Text style={styles.fonts} onPress={onPress}>
       {children}
@@ -10,10 +10,10 @@ const TextBold20 = ({ onPress, children }) => {
 
 const styles = StyleSheet.create({
   fonts: {
-    fontSize: 20,
+    fontSize: 18,
     textTransform: "uppercase",
     fontWeight: "bold",
   },
 });
 
-export default TextBold20;
+export default TextBold18;

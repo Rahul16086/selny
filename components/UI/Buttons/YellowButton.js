@@ -1,4 +1,5 @@
 import { Pressable, Text, StyleSheet } from "react-native";
+import TextBold18 from "../Text/TextBold18";
 
 const YellowButton = ({ onPress, children }) => {
   return (
@@ -7,7 +8,7 @@ const YellowButton = ({ onPress, children }) => {
       style={styles.buttonTouch}
       onPress={onPress}
     >
-      <Text style={styles.fonts}>{children}</Text>
+      <TextBold18 style={styles.fonts}>{children}</TextBold18>
     </Pressable>
   );
 };
@@ -21,13 +22,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
-  },
-  fonts: {
-    fontSize: 20,
-    textTransform: "uppercase",
-    fontWeight: "bold",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
 
