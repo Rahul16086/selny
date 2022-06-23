@@ -11,7 +11,7 @@ import googleLogo from "../../assets/Google.png";
 import SignUp from "./SignUp";
 import { useState } from "react";
 
-export default function Login() {
+const Login = () => {
   const toggleSignUp = () => {
     setSignUpClicked(() => !signUpClicked);
   };
@@ -57,7 +57,7 @@ export default function Login() {
       )}
     </View>
   );
-}
+};
 
 export const styles = StyleSheet.create({
   mainContainer: {
@@ -125,3 +125,5 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 });
+
+export default Login;

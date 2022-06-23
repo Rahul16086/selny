@@ -1,14 +1,14 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import Login from "./components/Auth/Login";
-import SignUp from "./components/Auth/SignUp";
+import { StatusBar as ExpoStatusBar } from "expo-status-bar";
+import { StyleSheet, View, StatusBar, SafeAreaView } from "react-native";
+import SellProduct from "./components/SellProduct/SellProduct";
+import Map from "./components/SellProduct/Map";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Login />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ExpoStatusBar style="auto" />
+      <Map />
+    </SafeAreaView>
   );
 }
 
@@ -18,5 +18,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: StatusBar.currentHeight,
   },
 });
