@@ -1,15 +1,12 @@
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { View, Image, StyleSheet, Pressable } from "react-native";
 import logo from "../../assets/Logo.png";
 import googleLogo from "../../assets/Google.png";
 import SignUp from "./SignUp";
 import { useState } from "react";
+import YellowButton from "../UI/Buttons/YellowButton";
+import TransparentButton from "../UI/Buttons/TransparentButton";
+import TextBold20 from "../UI/Text/TextBold20";
+import TextInputGrey from "../UI/Input/TextInputGrey";
 
 const Login = () => {
   const toggleSignUp = () => {
@@ -22,37 +19,21 @@ const Login = () => {
       {signUpClicked && <SignUp onBack={toggleSignUp} />}
       {!signUpClicked && (
         <View style={styles.formContainer}>
-          <Text style={styles.fonts}>Username/E-Mail</Text>
-          <TextInput style={styles.textInput}></TextInput>
-          <Text style={styles.fonts}>Password</Text>
-          <TextInput style={styles.textInput} secureTextEntry></TextInput>
-          <Pressable
-            android_ripple={{ color: "#ffffff" }}
-            style={styles.buttonTouch}
-          >
-            <Text style={styles.fonts}>Login</Text>
-          </Pressable>
-          <Pressable
-            style={styles.forgotPassword}
-            android_ripple={{ color: "#ffffff" }}
-          >
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-          </Pressable>
+          <TextBold20>Username/E-Mail</TextBold20>
+          <TextInputGrey />
+          <TextBold20>Password</TextBold20>
+          <TextInputGrey secureTextEntry />
+          <YellowButton>Login</YellowButton>
+          <TransparentButton>Forgot Password?</TransparentButton>
         </View>
       )}
       {!signUpClicked && (
         <View style={styles.otherSignInOptions}>
-          <Text style={styles.fonts}>Sign-In Using</Text>
+          <TextBold20>Sign-In Using</TextBold20>
           <Pressable android_ripple={{ color: "#ffffff" }}>
             <Image source={googleLogo} />
           </Pressable>
-          <Pressable
-            style={styles.buttonTouch}
-            onPress={toggleSignUp}
-            android_ripple={{ color: "#ffffff" }}
-          >
-            <Text style={styles.fonts}>Create Account</Text>
-          </Pressable>
+          <YellowButton onPress={toggleSignUp}>Create Account</YellowButton>
         </View>
       )}
     </View>
@@ -63,13 +44,6 @@ export const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: "90%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  fonts: {
-    fontSize: 20,
-    textTransform: "uppercase",
-    fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -88,35 +62,6 @@ export const styles = StyleSheet.create({
     shadowRadius: 3,
     justifyContent: "center",
     alignItems: "flex-start",
-  },
-  textInput: {
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "#6D6D6D",
-    paddingHorizontal: 8,
-    height: 50,
-    width: "100%",
-    marginTop: 5,
-    marginBottom: 10,
-    fontSize: 18,
-  },
-  buttonTouch: {
-    width: "100%",
-    backgroundColor: "#FEB700",
-    borderRadius: 5,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  forgotPassword: {
-    width: "100%",
-    alignItems: "center",
-  },
-  forgotPasswordText: {
-    fontSize: 14,
-    color: "#0066C4",
-    letterSpacing: 0.5,
   },
   otherSignInOptions: {
     width: "90%",

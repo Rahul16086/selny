@@ -1,14 +1,4 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  Alert,
-  Image,
-  ScrollView,
-} from "react-native";
-import { styles } from "../Auth/Login";
+import { View, StyleSheet, Alert, Image, ScrollView } from "react-native";
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
@@ -17,6 +7,9 @@ import {
   useForegroundPermissions,
 } from "expo-location";
 import { getMapPreview } from "../../utils/location";
+import TextBold20 from "../UI/Text/TextBold20";
+import TextInputGrey from "../UI/Input/TextInputGrey";
+import YellowButton from "../UI/Buttons/YellowButton";
 
 const SellProduct = () => {
   const [image, setImage] = useState(null);
@@ -33,7 +26,6 @@ const SellProduct = () => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      Alert.alert("Image picked");
     }
   };
 
@@ -71,18 +63,16 @@ const SellProduct = () => {
   return (
     <View style={sellProductStyles.mainContainer}>
       <ScrollView>
-        <Text style={styles.fonts}>Item name</Text>
-        <TextInput style={styles.textInput} />
-        <Text style={styles.fonts}>Description</Text>
-        <TextInput style={styles.textInput} />
-        <Text style={styles.fonts}>Price</Text>
-        <TextInput style={styles.textInput} />
-        <Text style={styles.fonts}>Year</Text>
-        <TextInput style={styles.textInput} />
-        <Text onPress={getLocationHandler} style={styles.fonts}>
-          Location
-        </Text>
-        <TextInput style={styles.textInput} />
+        <TextBold20>Item name</TextBold20>
+        <TextInputGrey />
+        <TextBold20>Description</TextBold20>
+        <TextInputGrey />
+        <TextBold20>Price</TextBold20>
+        <TextInputGrey />
+        <TextBold20>Year</TextBold20>
+        <TextInputGrey />
+        <TextBold20 onPress={getLocationHandler}>Location</TextBold20>
+        <TextInputGrey />
         {pickedLocation ? (
           <Image
             source={{
@@ -91,22 +81,11 @@ const SellProduct = () => {
             style={sellProductStyles.mapsPreview}
           />
         ) : (
-          <Text>No location picked</Text>
+          <TextBold20>No location picked</TextBold20>
         )}
-
-        <Pressable
-          onPress={pickImage}
-          style={styles.buttonTouch}
-          android_ripple={{ color: "#ffffff" }}
-        >
-          <Text style={styles.fonts}>Add Images</Text>
-        </Pressable>
-        <Pressable
-          style={styles.buttonTouch}
-          android_ripple={{ color: "#ffffff" }}
-        >
-          <Text style={styles.fonts}>Post</Text>
-        </Pressable>
+        {image && <TextBold20>{image}</TextBold20>}
+        <YellowButton onPress={pickImage}>Add Images</YellowButton>
+        <YellowButton>Post</YellowButton>
       </ScrollView>
     </View>
   );
@@ -115,7 +94,6 @@ const SellProduct = () => {
 const sellProductStyles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    justifyContent: "center",
     width: "90%",
   },
   mapsPreview: {
