@@ -29,7 +29,7 @@ const Login = () => {
           <TextInputGrey secureTextEntry />
           <YellowButton
             onPress={() => {
-              navigation.navigate("home");
+              navigation.navigate("homeTabs");
             }}
           >
             Login
@@ -40,7 +40,7 @@ const Login = () => {
       {!signUpClicked && (
         <View style={styles.otherSignInOptions}>
           <TextBold18>Sign-In Using</TextBold18>
-          <Pressable android_ripple={{ color: "#ffffff" }}>
+          <Pressable android_ripple={{ color: "#6d6d6d" }}>
             <Image source={googleLogo} />
           </Pressable>
           <YellowButton onPress={toggleSignUp}>Create Account</YellowButton>
@@ -52,10 +52,11 @@ const Login = () => {
 
 export const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
-    justifyContent: "center",
+    // flex: 1,
+    justifyContent: "space-between",
     alignItems: "center",
-    padding: 10,
+    margin: 10,
+    height: "80%",
   },
   formContainer: {
     borderRadius: 10,

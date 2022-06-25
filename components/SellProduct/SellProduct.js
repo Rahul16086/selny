@@ -7,7 +7,7 @@ import {
   useForegroundPermissions,
 } from "expo-location";
 import { getMapPreview } from "../../utils/location";
-import TextBold20 from "../UI/Text/TextBold20";
+import TextBold18 from "../UI/Text/TextBold18";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 import YellowButton from "../UI/Buttons/YellowButton";
 
@@ -63,15 +63,15 @@ const SellProduct = () => {
   return (
     <View style={sellProductStyles.mainContainer}>
       <ScrollView>
-        <TextBold20>Item name</TextBold20>
+        <TextBold18>Item name</TextBold18>
         <TextInputGrey />
-        <TextBold20>Description</TextBold20>
+        <TextBold18>Description</TextBold18>
         <TextInputGrey />
-        <TextBold20>Price</TextBold20>
+        <TextBold18>Price</TextBold18>
         <TextInputGrey />
-        <TextBold20>Year</TextBold20>
+        <TextBold18>Year</TextBold18>
         <TextInputGrey />
-        <TextBold20 onPress={getLocationHandler}>Location</TextBold20>
+        <TextBold18 onPress={getLocationHandler}>Location</TextBold18>
         <TextInputGrey />
         {pickedLocation ? (
           <Image
@@ -81,9 +81,9 @@ const SellProduct = () => {
             style={sellProductStyles.mapsPreview}
           />
         ) : (
-          <TextBold20>No location picked</TextBold20>
+          <TextBold18>No location picked</TextBold18>
         )}
-        {image && <TextBold20>{image}</TextBold20>}
+        {image && <TextBold18>{image}</TextBold18>}
         <YellowButton onPress={pickImage}>Add Images</YellowButton>
         <YellowButton>Post</YellowButton>
       </ScrollView>
@@ -93,12 +93,12 @@ const SellProduct = () => {
 
 const sellProductStyles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
-    width: "90%",
+    padding: 10,
   },
   mapsPreview: {
     width: "100%",
     height: 200,
   },
 });
+
 export default SellProduct;
