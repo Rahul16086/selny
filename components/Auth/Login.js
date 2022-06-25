@@ -7,8 +7,10 @@ import YellowButton from "../UI/Buttons/YellowButton";
 import TransparentButton from "../UI/Buttons/TransparentButton";
 import TextBold18 from "../UI/Text/TextBold18";
 import TextInputGrey from "../UI/Input/TextInputGrey";
+import { useNavigation } from "@react-navigation/native";
 
-const Login = ({ navigation }) => {
+const Login = () => {
+  const navigation = useNavigation();
   const toggleSignUp = () => {
     setSignUpClicked(() => !signUpClicked);
   };
@@ -16,7 +18,9 @@ const Login = ({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
       <Image source={logo} />
-      {signUpClicked && <SignUp onBack={toggleSignUp} />}
+      {signUpClicked && (
+        <SignUp onBack={toggleSignUp} navigation={navigation} />
+      )}
       {!signUpClicked && (
         <View style={styles.formContainer}>
           <TextBold18>Username/E-Mail</TextBold18>
@@ -25,7 +29,7 @@ const Login = ({ navigation }) => {
           <TextInputGrey secureTextEntry />
           <YellowButton
             onPress={() => {
-              navigation.replace("home");
+              navigation.navigate("home");
             }}
           >
             Login

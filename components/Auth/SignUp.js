@@ -15,7 +15,13 @@ const SignUp = (props) => {
       <TextInputGrey secureTextEntry />
       <TextBold18>Confirm Password</TextBold18>
       <TextInputGrey secureTextEntry />
-      <YellowButton>Create Account</YellowButton>
+      <YellowButton
+        onPress={() => {
+          props.navigation.navigate("home");
+        }}
+      >
+        Create Account
+      </YellowButton>
       <YellowButton onPress={props.onBack}>Back</YellowButton>
     </View>
   );
