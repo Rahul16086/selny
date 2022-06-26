@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
+import Products from "../components/Products/Products";
 
 const Home = () => {
   return (
     <View style={styles.container}>
-      <Text>Navigation workss!!</Text>
+      <Products />
     </View>
   );
 };
@@ -14,7 +15,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
