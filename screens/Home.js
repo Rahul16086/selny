@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 import Products from "../components/Products/Products";
 
 const Home = () => {
@@ -14,6 +14,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
+    marginTop: StatusBar.currentHeight,
   },
 });

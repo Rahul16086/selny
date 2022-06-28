@@ -14,7 +14,11 @@ const Tab = createBottomTabNavigator();
 function HomeTabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="home" component={Home} options={{ title: "Home" }} />
+      <Tab.Screen
+        name="home"
+        component={Home}
+        options={{ title: "Home", headerShown: false }}
+      />
       <Tab.Screen
         name="profile"
         component={Profile}
@@ -35,7 +39,7 @@ export default function App() {
     <>
       <ExpoStatusBar style="auto" />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="login">
+        <Stack.Navigator>
           <Stack.Screen
             name="homeTabs"
             component={HomeTabs}

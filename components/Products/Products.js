@@ -1,8 +1,35 @@
-import { Button, FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import TextBold18 from "../UI/Text/TextBold18";
-import ProductTile from "./ProductTile";
+import ProductList from "./ProductList";
 
 const Products = () => {
+  const productInfo = [
+    { key: "Item1" },
+    { key: "Item2" },
+    { key: "Item3" },
+    { key: "Item4" },
+    { key: "Item5" },
+    { key: "Item6" },
+    { key: "Item7" },
+    { key: "Item8" },
+    { key: "Item9" },
+    { key: "Item10" },
+    { key: "Item11" },
+    { key: "Item12" },
+    { key: "Item13" },
+    { key: "Item14" },
+    { key: "Item15" },
+    { key: "Item16" },
+    { key: "Item17" },
+    { key: "Item18" },
+    { key: "Item19" },
+    { key: "Item20" },
+    { key: "Item21" },
+    { key: "Item22" },
+    { key: "Item23" },
+    { key: "Item24" },
+    { key: "Item25" },
+  ];
   return (
     <View style={styles.mainContainer}>
       <View style={styles.searchBar}>
@@ -15,32 +42,9 @@ const Products = () => {
         <Button title="New" />
         <Button title="Used" />
       </View>
-      <ScrollView contentContainerStyle={styles.products}>
-        {/*<FlatList
-          data={[
-            { key: "Item1" },
-            { key: "Item2" },
-            { key: "Item3" },
-            { key: "Item4" },
-            { key: "Item5" },
-            { key: "Item6" },
-          ]}
-          renderItem={({ item }) => <ProductTile title={item.key} />}
-          contentContainerStyle={{
-            borderWidth: 1,
-            flexDirection: "row",
-            flex: 1,
-            flexWrap: "wrap",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-          }}
-          scrollEnabled={true}
-        />*/}
-        <ProductTile title="Item1" />
-        <ProductTile title="Item2" />
-        <ProductTile title="Item3" />
-        <ProductTile title="Item4" />
-      </ScrollView>
+      <View style={{ flex: 1 }}>
+        <ProductList productInfo={productInfo} />
+      </View>
     </View>
   );
 };
@@ -53,13 +57,13 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 60,
-    backgroundColor: "gold",
+    backgroundColor: "#FEB700",
     justifyContent: "center",
     paddingHorizontal: 16,
   },
   location: {
     height: 50,
-    backgroundColor: "green",
+    backgroundColor: "#FFDB7D",
     justifyContent: "center",
     paddingHorizontal: 16,
   },

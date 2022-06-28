@@ -1,10 +1,11 @@
-import { Text, View, StyleSheet } from "react-native";
-
-const ProductTile = ({ title }) => {
+import { Text, StyleSheet, Pressable, Image } from "react-native";
+import logo from "../../assets/Logo.png";
+const ProductTile = ({ item }) => {
   return (
-    <View style={styles.container}>
-      <Text>{title}</Text>
-    </View>
+    <Pressable style={styles.container} android_ripple={{ color: "6d6d6d" }}>
+      <Image source={logo} style={styles.image} />
+      <Text>{item.key}</Text>
+    </Pressable>
   );
 };
 
@@ -14,9 +15,15 @@ const styles = StyleSheet.create({
   container: {
     elevation: 10,
     backgroundColor: "white",
-    width: "45%",
-    height: "50%",
+    width: 170,
+    height: 220,
     borderRadius: 10,
-    marginVertical: 5,
+    margin: 5,
+    padding: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: "75%",
   },
 });
