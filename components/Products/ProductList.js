@@ -11,7 +11,6 @@ const ProductList = ({ productInfo }) => {
       contentContainerStyle={{
         justifyContent: "center",
         alignItems: "center",
-        paddingVertical: 10,
         paddingHorizontal: 10,
       }}
     />

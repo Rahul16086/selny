@@ -7,6 +7,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Profile from "./screens/Profile";
 import Cart from "./screens/Cart";
 import SellItem from "./screens/SellItem";
+import AppLoading from "expo-app-loading";
+import React, { useState } from "react";
+import useFonts from "./hooks/useFonts";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,6 +38,21 @@ function HomeTabs() {
 }
 
 export default function App() {
+  const [IsReady, SetIsReady] = useState(false);
+
+  const LoadFonts = async () => {
+    await useFonts();
+  };
+
+  if (!IsReady) {
+    return (
+      <AppLoading
+        startAsync={LoadFonts}
+        onFinish={() => SetIsReady(true)}
+        onError={() => {}}
+      />
+    );
+  }
   return (
     <>
       <ExpoStatusBar style="auto" />

@@ -1,13 +1,14 @@
-import { Button, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
+import YellowButtonSmall from "../UI/Buttons/YellowButtonSmall";
 import TextBold18 from "../UI/Text/TextBold18";
 import ProductList from "./ProductList";
 
 const Products = () => {
   const productInfo = [
-    { key: "Item1" },
-    { key: "Item2" },
-    { key: "Item3" },
-    { key: "Item4" },
+    { key: "Item1", name: "Apple iPhone 13 Pro" },
+    { key: "Item2", name: "Apple iPhone 13 Pro" },
+    { key: "Item3", name: "Apple iPhone 13 Pro" },
+    { key: "Item4", name: "Apple iPhone 13 Pro" },
     { key: "Item5" },
     { key: "Item6" },
     { key: "Item7" },
@@ -19,16 +20,6 @@ const Products = () => {
     { key: "Item13" },
     { key: "Item14" },
     { key: "Item15" },
-    { key: "Item16" },
-    { key: "Item17" },
-    { key: "Item18" },
-    { key: "Item19" },
-    { key: "Item20" },
-    { key: "Item21" },
-    { key: "Item22" },
-    { key: "Item23" },
-    { key: "Item24" },
-    { key: "Item25" },
   ];
   return (
     <View style={styles.mainContainer}>
@@ -36,11 +27,11 @@ const Products = () => {
         <TextBold18>🔍 Search bar</TextBold18>
       </View>
       <View style={styles.location}>
-        <TextBold18>📍 G4, Glasgow</TextBold18>
+        <Text style={styles.locationText}>📍 G4, Glasgow</Text>
       </View>
       <View style={styles.buttons}>
-        <Button title="New" />
-        <Button title="Used" />
+        <YellowButtonSmall>New</YellowButtonSmall>
+        <YellowButtonSmall>Used</YellowButtonSmall>
       </View>
       <View style={{ flex: 1 }}>
         <ProductList productInfo={productInfo} />
@@ -62,15 +53,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   location: {
-    height: 50,
+    height: 40,
     backgroundColor: "#FFDB7D",
     justifyContent: "center",
     paddingHorizontal: 16,
+  },
+  locationText: {
+    fontSize: 18,
+    letterSpacing: 0.5,
+    // fontFamily: "poppins",
   },
   buttons: {
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-evenly",
+    alignItems: "center",
+    height: 50,
   },
   products: {
     flex: 1,
