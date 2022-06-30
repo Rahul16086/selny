@@ -1,10 +1,10 @@
 import { View, StyleSheet, StatusBar } from "react-native";
 import Products from "../components/Products/Products";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Products />
+      <Products navigation={navigation} />
     </View>
   );
 };

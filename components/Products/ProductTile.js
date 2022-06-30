@@ -2,9 +2,14 @@ import { StyleSheet, Pressable, Image, View } from "react-native";
 import productImage from "../../assets/productImage1.png";
 import Text12 from "../UI/Text/Text12";
 import TextBold18 from "../UI/Text/TextBold18";
-const ProductTile = ({ item }) => {
+
+const ProductTile = ({ item, navigation }) => {
   return (
-    <Pressable style={styles.container} android_ripple={{ color: "6d6d6d" }}>
+    <Pressable
+      style={styles.container}
+      android_ripple={{ color: "6d6d6d" }}
+      onPress={() => navigation.navigate("productDetails")}
+    >
       <View style={styles.imageContainer}>
         <Image source={productImage} style={styles.image} />
       </View>

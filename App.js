@@ -10,6 +10,7 @@ import SellItem from "./screens/SellItem";
 import AppLoading from "expo-app-loading";
 import React, { useState } from "react";
 import useFonts from "./hooks/useFonts";
+import ProductsDetailsView from "./screens/ProductDetailsView";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,6 +70,11 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="home" component={Home} />
+          <Stack.Screen
+            name="productDetails"
+            component={ProductsDetailsView}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

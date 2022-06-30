@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet } from "react-native";
 import TextBold18 from "../Text/TextBold18";
 
-const YellowButton = ({ width, onPress, uppercase, children }) => {
+const OrangeButton = ({ width, onPress, uppercase, children }) => {
   const styles = StyleSheet.create({
     buttonTouch: {
       width: width ? width : "100%",
-      backgroundColor: "#FEB700",
+      backgroundColor: "#FF6B00",
       borderRadius: 10,
       height: 40,
       justifyContent: "center",
@@ -24,4 +24,4 @@ const YellowButton = ({ width, onPress, uppercase, children }) => {
   );
 };
 
-export default YellowButton;
+export default OrangeButton;

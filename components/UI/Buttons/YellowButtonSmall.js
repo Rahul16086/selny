@@ -16,7 +16,7 @@ const YellowButtonSmall = ({ onPress, children }) => {
 const styles = StyleSheet.create({
   buttonTouch: {
     backgroundColor: "#FEB700",
-    borderRadius: 5,
+    borderRadius: 10,
     height: "85%",
     width: "40%",
     justifyContent: "center",

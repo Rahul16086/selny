@@ -3,7 +3,7 @@ import YellowButtonSmall from "../UI/Buttons/YellowButtonSmall";
 import TextBold18 from "../UI/Text/TextBold18";
 import ProductList from "./ProductList";
 
-const Products = () => {
+const Products = ({ navigation }) => {
   const productInfo = [
     { key: "Item1", name: "Apple iPhone 13 Pro" },
     { key: "Item2", name: "Apple iPhone 13 Pro" },
@@ -34,7 +34,7 @@ const Products = () => {
         <YellowButtonSmall>Used</YellowButtonSmall>
       </View>
       <View style={{ flex: 1 }}>
-        <ProductList productInfo={productInfo} />
+        <ProductList productInfo={productInfo} navigation={navigation} />
       </View>
     </View>
   );
