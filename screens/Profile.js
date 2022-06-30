@@ -1,11 +1,7 @@
-import { Text, View } from "react-native";
+import ProfileComponents from "../components/Profile/ProfileComponents";
 
 const Profile = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Profile!</Text>
-    </View>
-  );
+  return <ProfileComponents />;
 };
 
 export default Profile;

@@ -17,7 +17,13 @@ const Tab = createBottomTabNavigator();
 
 function HomeTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: "#FEB700",
+        },
+      }}
+    >
       <Tab.Screen
         name="home"
         component={Home}
@@ -26,7 +32,7 @@ function HomeTabs() {
       <Tab.Screen
         name="profile"
         component={Profile}
-        options={{ title: "Profile" }}
+        options={{ title: "Profile", headerShown: false }}
       />
       <Tab.Screen name="cart" component={Cart} options={{ title: "Cart" }} />
       <Tab.Screen

@@ -1,7 +1,8 @@
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, TextInput, Image } from "react-native";
 import YellowButtonSmall from "../UI/Buttons/YellowButtonSmall";
-import TextBold18 from "../UI/Text/TextBold18";
 import ProductList from "./ProductList";
+import searchIcon from "../../assets/icons/Searchicon.png";
+import locationPin from "../../assets/icons/locationPin.png";
 
 const Products = ({ navigation }) => {
   const productInfo = [
@@ -9,25 +10,22 @@ const Products = ({ navigation }) => {
     { key: "Item2", name: "Apple iPhone 13 Pro" },
     { key: "Item3", name: "Apple iPhone 13 Pro" },
     { key: "Item4", name: "Apple iPhone 13 Pro" },
-    { key: "Item5" },
-    { key: "Item6" },
-    { key: "Item7" },
-    { key: "Item8" },
-    { key: "Item9" },
-    { key: "Item10" },
-    { key: "Item11" },
-    { key: "Item12" },
-    { key: "Item13" },
-    { key: "Item14" },
-    { key: "Item15" },
+    { key: "Item5", name: "Apple iPhone 13 Pro" },
+    { key: "Item6", name: "Apple iPhone 13 Pro" },
+    { key: "Item7", name: "Apple iPhone 13 Pro" },
+    { key: "Item8", name: "Apple iPhone 13 Pro" },
   ];
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.searchBar}>
-        <TextBold18>🔍 Search bar</TextBold18>
+      <View style={styles.searchBarContainer}>
+        <View style={styles.searchBar}>
+          <Image source={searchIcon} />
+          <TextInput style={styles.searchBarInput} />
+        </View>
       </View>
       <View style={styles.location}>
-        <Text style={styles.locationText}>📍 G4, Glasgow</Text>
+        <Image source={locationPin} />
+        <Text style={styles.locationText}> G4 0AJ, Glasgow, UK</Text>
       </View>
       <View style={styles.buttons}>
         <YellowButtonSmall>New</YellowButtonSmall>
@@ -46,22 +44,46 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
-  searchBar: {
+  searchBarContainer: {
     height: 60,
     backgroundColor: "#FEB700",
     justifyContent: "center",
-    paddingHorizontal: 16,
+    alignItems: "center",
+    paddingHorizontal: 20,
+    flexDirection: "row",
+  },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    elevation: 8,
+  },
+  searchIcon: { borderWidth: 1 },
+  searchBarInput: {
+    borderWidth: 1,
+    backgroundColor: "#ffffff",
+    borderColor: "#ffffff",
+    height: 45,
+    width: "90%",
+    paddingLeft: 8,
+    fontSize: 18,
   },
   location: {
     height: 40,
     backgroundColor: "#FFDB7D",
     justifyContent: "center",
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
   },
   locationText: {
     fontSize: 18,
     letterSpacing: 0.5,
-    // fontFamily: "poppins",
   },
   buttons: {
     flexDirection: "row",
