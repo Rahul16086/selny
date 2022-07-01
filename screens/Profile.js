@@ -1,7 +1,7 @@
-import ProfileComponents from "../components/Profile/ProfileComponents";
+import ProfileMain from "../components/Profile/ProfileMain";
 
 const Profile = () => {
-  return <ProfileComponents />;
+  return <ProfileMain />;
 };
 
 export default Profile;

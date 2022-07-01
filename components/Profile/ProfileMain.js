@@ -6,8 +6,11 @@ import faqIcon from "../../assets/icons/FAQIcon.png";
 import bellIcon from "../../assets/icons/BellIcon.png";
 import RedShadowButton from "../UI/Buttons/RedShadowButton";
 import ShadowIconButton from "../UI/Buttons/ShadowIconButton";
+import { useNavigation } from "@react-navigation/native";
 
-const ProfileComponents = () => {
+const ProfileMain = () => {
+  const Navigation = useNavigation();
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -40,7 +43,11 @@ const ProfileComponents = () => {
         <Image source={avatar} />
       </View>
       <View style={styles.myOrdersContainer}>
-        <ShadowIconButton icon={myOrdersIcon} text={"My Orders"} />
+        <ShadowIconButton
+          icon={myOrdersIcon}
+          text={"My Orders"}
+          onPress={() => Navigation.navigate("myOrders")}
+        />
       </View>
       <View style={styles.otherActionsContainer}>
         <ShadowIconButton icon={profileIcon} text={"My Profile"} />
@@ -54,4 +61,4 @@ const ProfileComponents = () => {
   );
 };
 
-export default ProfileComponents;
+export default ProfileMain;
