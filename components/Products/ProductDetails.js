@@ -48,19 +48,24 @@ const styles = StyleSheet.create({
   },
   productBrand: {
     fontSize: 20,
+    fontFamily: "montserratMedium",
   },
   productName: {
     fontSize: 26,
-    fontWeight: "600",
+    fontFamily: "montserratSemiBold",
   },
-  productRating: { fontSize: 18 },
+  productRating: { fontSize: 18, fontFamily: "montserrat" },
   productPrice: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
-  productPricePound: { fontSize: 20 },
-  productPriceNumber: { fontSize: 32, fontWeight: "700", marginLeft: 5 },
+  productPricePound: { fontSize: 20, fontFamily: "montserrat" },
+  productPriceNumber: {
+    fontSize: 32,
+    fontFamily: "montserratBold",
+    marginLeft: 5,
+  },
   buttonContainer: {
     height: "25%",
     justifyContent: "center",

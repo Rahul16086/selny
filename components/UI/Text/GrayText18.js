@@ -5,6 +5,7 @@ const GrayText18 = ({ children }) => {
   const style = StyleSheet.create({
     font: {
       fontSize: 18,
+      fontFamily: "montserrat",
       color: "#6d6d6d",
     },
   });

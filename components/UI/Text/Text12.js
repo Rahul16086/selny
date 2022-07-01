@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   fonts: {
     fontSize: 16,
     letterSpacing: 0.5,
-    // fontFamily: "poppins",
+    fontFamily: "montserrat",
   },
 });
 

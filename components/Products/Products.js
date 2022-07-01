@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     width: "90%",
     paddingLeft: 8,
     fontSize: 18,
+    fontFamily: "montserrat",
   },
   location: {
     height: 40,
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 18,
     letterSpacing: 0.5,
+    fontFamily: "montserratMedium",
   },
   buttons: {
     flexDirection: "row",

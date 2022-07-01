@@ -38,6 +38,9 @@ const OrdersBanner = ({
       justifyContent: "space-between",
       paddingVertical: 5,
     },
+    deliveredText: {
+      fontFamily: "montserrat",
+    },
     goArrowContainer: {
       width: "10%",
       alignItems: "center",
@@ -55,7 +58,7 @@ const OrdersBanner = ({
       </View>
       <View style={styles.productInfoContainer}>
         <TextBold18>{productName}</TextBold18>
-        <Text>Delivered on {deliveryDate}</Text>
+        <Text style={styles.deliveredText}>Delivered on {deliveryDate}</Text>
       </View>
       <View style={styles.goArrowContainer}>
         <Image source={goArrow} />

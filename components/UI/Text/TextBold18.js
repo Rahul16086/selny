@@ -5,8 +5,7 @@ const TextBold18 = ({ onPress, uppercase, children }) => {
     fonts: {
       fontSize: 18,
       textTransform: uppercase ? "uppercase" : null,
-      fontWeight: "bold",
-      letterSpacing: 0.5,
+      fontFamily: "montserratSemiBold",
     },
   });
   return (

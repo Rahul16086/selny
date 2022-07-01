@@ -18,9 +18,8 @@ const RedShadowButton = ({ icon, text, onPress }) => {
     },
     RedShadowButtonText: {
       fontSize: 20,
-      fontWeight: "500",
+      fontFamily: "montserratMedium",
       color: "red",
-      letterSpacing: 0.5,
     },
   });
   return (

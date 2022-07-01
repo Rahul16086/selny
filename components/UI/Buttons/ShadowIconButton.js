@@ -17,8 +17,7 @@ const ShadowIconButton = ({ icon, text, onPress }) => {
     },
     shadowIconButtonText: {
       fontSize: 20,
-      fontWeight: "500",
-      letterSpacing: 0.5,
+      fontFamily: "montserratMedium",
     },
   });
   return (

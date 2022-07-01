@@ -17,7 +17,7 @@ const OrderDetailedBanner = ({ productInfo }) => {
     },
     productName: {
       fontSize: 28,
-      fontWeight: "500",
+      fontFamily: "montserrat",
     },
     priceContainer: {
       flexDirection: "row",
@@ -25,11 +25,12 @@ const OrderDetailedBanner = ({ productInfo }) => {
     },
     productPrice: {
       fontSize: 30,
-      fontWeight: "700",
+      fontFamily: "montserratBold",
     },
     priceSymbol: {
       fontSize: 24,
       marginRight: 5,
+      fontFamily: "montserrat",
     },
   });
 
