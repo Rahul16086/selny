@@ -2,22 +2,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginSignUp from "./screens/LoginSignUp";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import Home from "./screens/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Profile from "./screens/Profile";
 import Cart from "./screens/Cart";
 import SellItem from "./screens/SellItem";
 import React, { useState, useEffect, useCallback } from "react";
 import useFonts from "./hooks/useFonts";
-import ProductsDetailsView from "./screens/ProductDetailsView";
 import homeIcon from "./assets/icons/HomeIcon.png";
 import { Image } from "react-native";
 import profileIconTab from "./assets/icons/ProfileIconTab.png";
 import cartIcon from "./assets/icons/CartIcon.png";
 import sellIcon from "./assets/icons/SellIcon.png";
-import MyOrders from "./screens/MyOrders";
-import MyOrdersDetailedView from "./screens/MyOrdersDetailedView";
 import * as SplashScreen from "expo-splash-screen";
+import ProfileStackScreen from "./stacks/ProfileStackScreen";
+import HomeStackScreen from "./stacks/HomeStackScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -72,49 +69,6 @@ function HomeTabs() {
         }}
       />
     </Tab.Navigator>
-  );
-}
-
-const HomeStack = createNativeStackNavigator();
-
-function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen
-        name="home"
-        component={Home}
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="productDetails"
-        component={ProductsDetailsView}
-        options={{ headerShown: false }}
-      />
-    </HomeStack.Navigator>
-  );
-}
-
-const ProfileStack = createNativeStackNavigator();
-
-function ProfileStackScreen() {
-  return (
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen
-        name="profile"
-        component={Profile}
-        options={{ headerShown: false }}
-      />
-      <ProfileStack.Screen
-        name="myOrders"
-        component={MyOrders}
-        options={{ headerShown: false }}
-      />
-      <ProfileStack.Screen
-        name="myOrdersDetailedView"
-        component={MyOrdersDetailedView}
-        options={{ headerShown: false }}
-      />
-    </ProfileStack.Navigator>
   );
 }
 
