@@ -7,8 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Profile from "./screens/Profile";
 import Cart from "./screens/Cart";
 import SellItem from "./screens/SellItem";
-import AppLoading from "expo-app-loading";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import useFonts from "./hooks/useFonts";
 import ProductsDetailsView from "./screens/ProductDetailsView";
 import homeIcon from "./assets/icons/HomeIcon.png";
@@ -18,6 +17,8 @@ import cartIcon from "./assets/icons/CartIcon.png";
 import sellIcon from "./assets/icons/SellIcon.png";
 import MyOrders from "./screens/MyOrders";
 import MyOrdersDetailedView from "./screens/MyOrdersDetailedView";
+import * as SplashScreen from "expo-splash-screen";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -118,25 +119,37 @@ function ProfileStackScreen() {
 }
 
 export default function App() {
-  const [IsReady, SetIsReady] = useState(false);
-
+  const [appIsReady, setAppIsReady] = useState(false);
   const LoadFonts = async () => {
     await useFonts();
   };
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        await LoadFonts();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+    prepare();
+  }, []);
 
-  if (!IsReady) {
-    return (
-      <AppLoading
-        startAsync={LoadFonts}
-        onFinish={() => SetIsReady(true)}
-        onError={() => {}}
-      />
-    );
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
   }
   return (
     <>
       <ExpoStatusBar style="auto" />
-      <NavigationContainer>
+      <NavigationContainer onReady={onLayoutRootView}>
         <Stack.Navigator>
           <Stack.Screen
             name="homeTabs"
