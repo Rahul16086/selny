@@ -1,12 +1,12 @@
 import { View } from "react-native";
 import Login from "../components/Auth/Login";
 
-const LoginSignUp = () => {
+const LoginScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
+    <View style={{ flex: 1, justifyContent: "space-evenly" }}>
       <Login />
     </View>
   );
 };
 
-export default LoginSignUp;
+export default LoginScreen;

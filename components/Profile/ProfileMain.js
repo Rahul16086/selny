@@ -55,7 +55,10 @@ const ProfileMain = () => {
         <ShadowIconButton icon={bellIcon} text={"Notification"} />
       </View>
       <View style={styles.signOutContainer}>
-        <RedShadowButton text={"Sign Out"} />
+        <RedShadowButton
+          text={"Sign Out"}
+          onPress={() => Navigation.navigate("login")}
+        />
       </View>
     </View>
   );

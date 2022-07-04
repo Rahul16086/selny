@@ -1,8 +1,13 @@
 import { TextInput, StyleSheet } from "react-native";
 
-const TextInputGrey = ({ secureTextEntry, children }) => {
+const TextInputGrey = ({ secureTextEntry, children, onChangeText, value }) => {
   return (
-    <TextInput style={styles.textInput} secureTextEntry={secureTextEntry}>
+    <TextInput
+      style={styles.textInput}
+      secureTextEntry={secureTextEntry}
+      onChangeText={onChangeText}
+      value={value}
+    >
       {children}
     </TextInput>
   );

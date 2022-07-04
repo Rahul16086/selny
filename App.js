@@ -1,6 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginSignUp from "./screens/LoginSignUp";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Cart from "./screens/Cart";
@@ -15,6 +14,8 @@ import sellIcon from "./assets/icons/SellIcon.png";
 import * as SplashScreen from "expo-splash-screen";
 import ProfileStackScreen from "./stacks/ProfileStackScreen";
 import HomeStackScreen from "./stacks/HomeStackScreen";
+import SignUpScreen from "./screens/SignUp";
+import LoginScreen from "./screens/Login";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -104,7 +105,7 @@ export default function App() {
     <>
       <ExpoStatusBar style="auto" />
       <NavigationContainer onReady={onLayoutRootView}>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="login">
           <Stack.Screen
             name="homeTabs"
             component={HomeTabs}
@@ -112,7 +113,12 @@ export default function App() {
           />
           <Stack.Screen
             name="login"
-            component={LoginSignUp}
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="signUp"
+            component={SignUpScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
