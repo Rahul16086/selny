@@ -1,4 +1,4 @@
-import { View, Image, StyleSheet, Pressable } from "react-native";
+import { View, Image, StyleSheet, Pressable, Alert } from "react-native";
 import logo from "../../assets/Logo.png";
 import googleLogo from "../../assets/Google.png";
 import YellowButton from "../UI/Buttons/YellowButton";
@@ -6,24 +6,71 @@ import TransparentButton from "../UI/Buttons/TransparentButton";
 import TextBold18 from "../UI/Text/TextBold18";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import { loginUser } from "../../utils/auth";
 
 const Login = () => {
   const navigation = useNavigation();
+  const [loginInputValues, setLoginInputValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  const inputChangedHandler = (inputIdentifier, enteredValue) => {
+    setLoginInputValues((currentInputValue) => {
+      return {
+        ...currentInputValue,
+        [inputIdentifier]: enteredValue,
+      };
+    });
+  };
+
+  const inputValidator = (loginInputValues) => {
+    if (
+      loginInputValues.email.length < 3 ||
+      loginInputValues.email.indexOf("@") === -1
+    ) {
+      return "Email is invalid";
+    }
+    if (loginInputValues.password.length < 6) {
+      return "Password must be at least 6 characters long";
+    }
+    return true;
+  };
+
+  const submitHandler = async () => {
+    const validate = inputValidator(loginInputValues);
+    if (validate === true) {
+      try {
+        const user = await loginUser(
+          loginInputValues.email,
+          loginInputValues.password
+        );
+        if (user.error) {
+          throw new Error(user.error.message);
+        }
+      } catch (error) {
+        Alert.alert("Login failed", error.message);
+      }
+    } else {
+      Alert.alert(
+        "Error logging in",
+        validate ? validate : "Please check the details entered"
+      );
+    }
+  };
   return (
     <View style={styles.mainContainer}>
       <Image source={logo} />
       <View style={styles.formContainer}>
-        <TextBold18>Username/E-Mail</TextBold18>
-        <TextInputGrey />
+        <TextBold18>E-Mail</TextBold18>
+        <TextInputGrey onChangeText={inputChangedHandler.bind(this, "email")} />
         <TextBold18>Password</TextBold18>
-        <TextInputGrey secureTextEntry />
-        <YellowButton
-          onPress={() => {
-            navigation.navigate("homeTabs");
-          }}
-        >
-          Login
-        </YellowButton>
+        <TextInputGrey
+          secureTextEntry
+          onChangeText={inputChangedHandler.bind(this, "password")}
+        />
+        <YellowButton onPress={submitHandler}>Login</YellowButton>
         <TransparentButton>Forgot Password?</TransparentButton>
       </View>
 

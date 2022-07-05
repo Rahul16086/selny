@@ -8,7 +8,7 @@ import logo from "../../assets/Logo.png";
 import { useNavigation } from "@react-navigation/native";
 import createUser from "../../utils/auth";
 
-const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/; //looks for one uppercase letter, atleast 6 chars long, and one number
+const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/; //looks for one uppercase letter, atleast 6 chars long, and one number
 
 const SignUp = () => {
   const Navigation = useNavigation();
@@ -56,14 +56,19 @@ const SignUp = () => {
       //     console.log(hash);
       //   });
       // });
-      console.log(signUpInputValues);
-      const response = await createUser(
-        signUpInputValues.email,
-        signUpInputValues.password
-      );
-      console.log(response);
-      if (response.idToken) {
-        Navigation.navigate("homeTabs");
+      try {
+        const response = await createUser(
+          signUpInputValues.email,
+          signUpInputValues.password
+        );
+        if (response.idToken) {
+          Navigation.navigate("homeTabs");
+        }
+        if (response.error) {
+          throw new Error(response.error.message);
+        }
+      } catch (error) {
+        Alert.alert("SignUp failed!", error.message);
       }
     } else {
       Alert.alert(
