@@ -7,10 +7,15 @@ import bellIcon from "../../assets/icons/BellIcon.png";
 import RedShadowButton from "../UI/Buttons/RedShadowButton";
 import ShadowIconButton from "../UI/Buttons/ShadowIconButton";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { setAuthLogout } from "../../store/redux/userSlice";
 
 const ProfileMain = () => {
   const Navigation = useNavigation();
-
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+    dispatch(setAuthLogout({ isAuthenticated: false, token: "" }));
+  };
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -55,10 +60,7 @@ const ProfileMain = () => {
         <ShadowIconButton icon={bellIcon} text={"Notification"} />
       </View>
       <View style={styles.signOutContainer}>
-        <RedShadowButton
-          text={"Sign Out"}
-          onPress={() => Navigation.navigate("login")}
-        />
+        <RedShadowButton text={"Sign Out"} onPress={logoutHandler} />
       </View>
     </View>
   );

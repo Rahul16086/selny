@@ -8,6 +8,8 @@ import TextInputGrey from "../UI/Input/TextInputGrey";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { loginUser } from "../../utils/auth";
+import { useDispatch } from "react-redux";
+import { setAuthLogin } from "../../store/redux/userSlice";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -15,7 +17,7 @@ const Login = () => {
     email: "",
     password: "",
   });
-
+  const dispatch = useDispatch();
   const inputChangedHandler = (inputIdentifier, enteredValue) => {
     setLoginInputValues((currentInputValue) => {
       return {
@@ -46,8 +48,14 @@ const Login = () => {
           loginInputValues.email,
           loginInputValues.password
         );
+        console.log(user.idToken);
         if (user.error) {
           throw new Error(user.error.message);
+        }
+        if (user.idToken) {
+          dispatch(
+            setAuthLogin({ isAuthenticated: true, token: user.idToken })
+          );
         }
       } catch (error) {
         Alert.alert("Login failed", error.message);
