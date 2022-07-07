@@ -9,12 +9,14 @@ import ShadowIconButton from "../UI/Buttons/ShadowIconButton";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setAuthLogout } from "../../store/redux/userSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileMain = () => {
   const Navigation = useNavigation();
   const dispatch = useDispatch();
   const logoutHandler = () => {
     dispatch(setAuthLogout({ isAuthenticated: false, token: "" }));
+    AsyncStorage.removeItem("token");
   };
   const styles = StyleSheet.create({
     container: {

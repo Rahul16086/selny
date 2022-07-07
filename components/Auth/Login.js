@@ -10,6 +10,7 @@ import { useState } from "react";
 import { loginUser } from "../../utils/auth";
 import { useDispatch } from "react-redux";
 import { setAuthLogin } from "../../store/redux/userSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -56,6 +57,7 @@ const Login = () => {
           dispatch(
             setAuthLogin({ isAuthenticated: true, token: user.idToken })
           );
+          AsyncStorage.setItem("token", user.idToken);
         }
       } catch (error) {
         Alert.alert("Login failed", error.message);

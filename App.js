@@ -6,16 +6,29 @@ import useFonts from "./hooks/useFonts";
 import * as SplashScreen from "expo-splash-screen";
 import SignUpScreen from "./screens/SignUp";
 import LoginScreen from "./screens/Login";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./store/redux/store";
 import { useSelector } from "react-redux";
 import HomeTabs from "./stacks/HomeTabs";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setAuthLogin } from "./store/redux/userSlice";
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   console.log("From App: ", isAuthenticated);
+  const dispatch = useDispatch();
+
+  const fetchToken = async () => {
+    const token = await AsyncStorage.getItem("token");
+    console.log("Stored Token:  ", token);
+    if (token) {
+      dispatch(setAuthLogin({ isAuthenticated: true, token }));
+    }
+  };
+  fetchToken();
+
   return (
     <Stack.Navigator initialRouteName="login">
       {isAuthenticated && (
