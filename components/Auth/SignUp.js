@@ -6,7 +6,11 @@ import TextBold18 from "../UI/Text/TextBold18";
 import { styles } from "./Login";
 import logo from "../../assets/Logo.png";
 import { useNavigation } from "@react-navigation/native";
-import createUser from "../../utils/auth";
+import { auth } from "../../config/firebase";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/; //looks for one uppercase letter, atleast 6 chars long, and one number
 
@@ -51,24 +55,21 @@ const SignUp = () => {
   const submitHandler = async () => {
     const validate = inputValidator(signUpInputValues);
     if (validate === true) {
-      // bcrypt.genSalt(10, (err, salt) => {
-      //   bcrypt.hash(signUpInputValues.password, salt, (err, hash) => {
-      //     console.log(hash);
-      //   });
-      // });
       try {
-        const response = await createUser(
+        const signUp = await createUserWithEmailAndPassword(
+          auth,
           signUpInputValues.email,
           signUpInputValues.password
         );
-        if (response.idToken) {
-          Navigation.navigate("homeTabs");
-        }
-        if (response.error) {
-          throw new Error(response.error.message);
+
+        if (signUp) {
+          console.log("sending...", auth.currentUser.email);
+          const email = await sendEmailVerification(auth.currentUser);
+          Navigation.navigate("signUpSuccess");
         }
       } catch (error) {
-        Alert.alert("SignUp failed!", error.message);
+        console.log("error", error);
+        Alert.alert("Email Already Exists!", "Please use a different email");
       }
     } else {
       Alert.alert(

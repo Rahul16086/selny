@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import HomeTabs from "./HomeTabs";
 import LoginScreen from "../screens/Login";
 import SignUpScreen from "../screens/SignUp";
+import SignUpSuccess from "../screens/SignUpSuccess";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,13 @@ const MainNavigation = () => {
         <Stack.Screen
           name="signUp"
           component={SignUpScreen}
+          options={{ headerShown: false }}
+        />
+      )}
+      {!isAuthenticated && (
+        <Stack.Screen
+          name="signUpSuccess"
+          component={SignUpSuccess}
           options={{ headerShown: false }}
         />
       )}

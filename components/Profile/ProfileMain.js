@@ -10,11 +10,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setAuthLogout } from "../../store/redux/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { signOut } from "firebase/auth";
+import { auth } from "../../config/firebase";
 
 const ProfileMain = () => {
   const Navigation = useNavigation();
   const dispatch = useDispatch();
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
+    await signOut(auth);
     dispatch(setAuthLogout({ isAuthenticated: false, token: "" }));
     AsyncStorage.removeItem("token");
   };

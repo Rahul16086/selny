@@ -11,6 +11,8 @@ import { loginUser } from "../../utils/auth";
 import { useDispatch } from "react-redux";
 import { setAuthLogin } from "../../store/redux/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebase";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -44,20 +46,35 @@ const Login = () => {
   const submitHandler = async () => {
     const validate = inputValidator(loginInputValues);
     if (validate === true) {
+      // try {
+      //   const user = await loginUser(
+      //     loginInputValues.email,
+      //     loginInputValues.password
+      //   );
+      //   console.log(user.idToken);
+      //   if (user.error) {
+      //     throw new Error(user.error.message);
+      //   }
+      //   if (user.idToken) {
+      //     dispatch(
+      //       setAuthLogin({ isAuthenticated: true, token: user.idToken })
+      //     );
+      //     AsyncStorage.setItem("token", user.idToken);
+      //   }
+      // } catch (error) {
+      //   Alert.alert("Login failed", error.message);
+      // }
       try {
-        const user = await loginUser(
+        const user = await signInWithEmailAndPassword(
+          auth,
           loginInputValues.email,
           loginInputValues.password
         );
-        console.log(user.idToken);
-        if (user.error) {
-          throw new Error(user.error.message);
-        }
-        if (user.idToken) {
+        if (user) {
           dispatch(
-            setAuthLogin({ isAuthenticated: true, token: user.idToken })
+            setAuthLogin({ isAuthenticated: true, token: user.user.uid })
           );
-          AsyncStorage.setItem("token", user.idToken);
+          AsyncStorage.setItem("token", user.user.uid);
         }
       } catch (error) {
         Alert.alert("Login failed", error.message);
