@@ -7,7 +7,6 @@ import TextBold18 from "../UI/Text/TextBold18";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { loginUser } from "../../utils/auth";
 import { useDispatch } from "react-redux";
 import { setAuthLogin } from "../../store/redux/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -46,24 +45,6 @@ const Login = () => {
   const submitHandler = async () => {
     const validate = inputValidator(loginInputValues);
     if (validate === true) {
-      // try {
-      //   const user = await loginUser(
-      //     loginInputValues.email,
-      //     loginInputValues.password
-      //   );
-      //   console.log(user.idToken);
-      //   if (user.error) {
-      //     throw new Error(user.error.message);
-      //   }
-      //   if (user.idToken) {
-      //     dispatch(
-      //       setAuthLogin({ isAuthenticated: true, token: user.idToken })
-      //     );
-      //     AsyncStorage.setItem("token", user.idToken);
-      //   }
-      // } catch (error) {
-      //   Alert.alert("Login failed", error.message);
-      // }
       try {
         const user = await signInWithEmailAndPassword(
           auth,
@@ -86,6 +67,11 @@ const Login = () => {
       );
     }
   };
+
+  const googleLoginHandler = () => {
+    console.log("Pressed");
+  };
+
   return (
     <View style={styles.mainContainer}>
       <Image source={logo} />
@@ -103,7 +89,10 @@ const Login = () => {
 
       <View style={styles.otherSignInOptions}>
         <TextBold18>Sign-In Using</TextBold18>
-        <Pressable android_ripple={{ color: "#6d6d6d" }}>
+        <Pressable
+          android_ripple={{ color: "#6d6d6d" }}
+          onPress={googleLoginHandler}
+        >
           <Image source={googleLogo} />
         </Pressable>
         <YellowButton onPress={() => navigation.navigate("signUp")}>

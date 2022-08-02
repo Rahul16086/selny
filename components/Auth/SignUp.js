@@ -11,6 +11,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/; //looks for one uppercase letter, atleast 6 chars long, and one number
 
@@ -64,7 +66,15 @@ const SignUp = () => {
 
         if (signUp) {
           console.log("sending...", auth.currentUser.email);
-          const email = await sendEmailVerification(auth.currentUser);
+          const setUserName = await setDoc(
+            doc(db, "users", auth.currentUser.uid),
+            {
+              full_name: signUpInputValues.fullName,
+              email: signUpInputValues.email,
+            }
+          );
+          console.log("setUserName", setUserName);
+          // const email = await sendEmailVerification(auth.currentUser);
           Navigation.navigate("signUpSuccess");
         }
       } catch (error) {
