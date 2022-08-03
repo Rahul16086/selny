@@ -55,6 +55,7 @@ const Login = () => {
           dispatch(
             setAuthLogin({ isAuthenticated: true, token: user.user.uid })
           );
+          console.log("User: ", user.user.uid);
           AsyncStorage.setItem("token", user.user.uid);
         }
       } catch (error) {

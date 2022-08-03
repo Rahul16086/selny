@@ -66,14 +66,10 @@ const SignUp = () => {
 
         if (signUp) {
           console.log("sending...", auth.currentUser.email);
-          const setUserName = await setDoc(
-            doc(db, "users", auth.currentUser.uid),
-            {
-              full_name: signUpInputValues.fullName,
-              email: signUpInputValues.email,
-            }
-          );
-          console.log("setUserName", setUserName);
+          await setDoc(doc(db, "users", auth.currentUser.uid), {
+            full_name: signUpInputValues.fullName,
+            email: signUpInputValues.email,
+          });
           // const email = await sendEmailVerification(auth.currentUser);
           Navigation.navigate("signUpSuccess");
         }

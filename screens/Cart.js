@@ -1,9 +1,10 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import TextBold18 from "../components/UI/Text/TextBold18";
 
 const Cart = () => {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Cart!</Text>
+      <TextBold18>Cart is empty :(</TextBold18>
     </View>
   );
 };

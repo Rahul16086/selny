@@ -12,6 +12,10 @@ import { setAuthLogout } from "../../store/redux/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signOut } from "firebase/auth";
 import { auth } from "../../config/firebase";
+import { getDoc, doc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "../../config/firebase";
+import TextBold18 from "../UI/Text/TextBold18";
 
 const ProfileMain = () => {
   const Navigation = useNavigation();
@@ -21,6 +25,23 @@ const ProfileMain = () => {
     dispatch(setAuthLogout({ isAuthenticated: false, token: "" }));
     AsyncStorage.removeItem("token");
   };
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const userId = await AsyncStorage.getItem("token");
+      console.log("userId: ", userId);
+      const currentUserRef = doc(db, "users", userId);
+      const userDbData = await getDoc(currentUserRef);
+      if (userDbData.exists()) {
+        setUser(userDbData.data());
+        console.log("user: ", userDbData.data());
+      }
+    };
+    getUser();
+  }, []);
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -51,6 +72,7 @@ const ProfileMain = () => {
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
         <Image source={avatar} />
+        <TextBold18>{user?.full_name}</TextBold18>
       </View>
       <View style={styles.myOrdersContainer}>
         <ShadowIconButton
@@ -60,7 +82,11 @@ const ProfileMain = () => {
         />
       </View>
       <View style={styles.otherActionsContainer}>
-        <ShadowIconButton icon={profileIcon} text={"My Profile"} />
+        <ShadowIconButton
+          icon={profileIcon}
+          text={"My Profile"}
+          onPress={() => Navigation.navigate("myProfile")}
+        />
         <ShadowIconButton icon={faqIcon} text={"FAQ"} />
         <ShadowIconButton icon={bellIcon} text={"Notification"} />
       </View>
