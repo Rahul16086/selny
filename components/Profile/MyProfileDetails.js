@@ -1,22 +1,34 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import TextBold22 from "../UI/Text/TextBold22";
 import Text20 from "../UI/Text/Text20";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import YellowButton from "../UI/Buttons/YellowButton";
 import TextInputGrey from "../UI/Input/TextInputGrey";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const MyProfileDetails = () => {
   const [userDetails, setUserDetails] = useState({
-    name: "",
+    full_name: "",
     email: "",
     address: "",
   });
+  const [addressInputValues, setAddressInputValues] = useState(
+    userDetails?.address
+  );
+  const [modifyInputValues, setModifyInputValues] = useState({
+    full_name: "",
+    address: "",
+  });
+  const [updated, setUpdated] = useState(false);
+  const [modifyMode, setModifyMode] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getUserDetails = async () => {
+      setLoading(true);
       const userId = await AsyncStorage.getItem("token");
       console.log("userId: ", userId);
       const currentUserRef = doc(db, "users", userId);
@@ -24,10 +36,65 @@ const MyProfileDetails = () => {
       if (userDbData.exists()) {
         setUserDetails(userDbData.data());
         console.log("user: ", userDbData.data());
+        setLoading(false);
       }
     };
     getUserDetails();
-  }, []);
+  }, [updated]);
+
+  const addAddressHandler = async () => {
+    try {
+      if (addressInputValues.length < 5) {
+        Alert.alert("Invalid Address", "Please enter a valid address");
+      } else {
+        const userId = await AsyncStorage.getItem("token");
+        const currentUserRef = doc(db, "users", userId);
+        await updateDoc(currentUserRef, {
+          address: addressInputValues,
+        });
+        setUpdated((prev) => !prev);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong " + error?.message);
+    }
+  };
+
+  const modifyModeToggle = () => {
+    setModifyInputValues({
+      full_name: userDetails.full_name,
+      address: userDetails.address,
+    });
+    setModifyMode((prev) => !prev);
+  };
+
+  const modifyChangedHandler = (inputIdentifier, enteredValue) => {
+    setModifyInputValues((currentInputValue) => {
+      return {
+        ...currentInputValue,
+        [inputIdentifier]: enteredValue,
+      };
+    });
+  };
+
+  const modifySubmitHandler = async () => {
+    try {
+      if (
+        modifyInputValues.full_name.length < 3 ||
+        modifyInputValues.address.length < 5
+      ) {
+        Alert.alert("Invalid Details", "Please check the details entered");
+      } else {
+        const userId = await AsyncStorage.getItem("token");
+        const currentUserRef = doc(db, "users", userId);
+        await updateDoc(currentUserRef, {
+          full_name: modifyInputValues.full_name,
+          address: modifyInputValues.address,
+        });
+        setUpdated((prev) => !prev);
+        setModifyMode(false);
+      }
+    } catch (error) {}
+  };
 
   const styles = StyleSheet.create({
     mainContainer: {
@@ -58,34 +125,76 @@ const MyProfileDetails = () => {
     },
     alignRow: {
       flexDirection: "row",
+      alignItems: "center",
+      width: "100%",
+      marginVertical: 5,
+    },
+    nameTextInput: {
+      borderWidth: 1,
+      borderRadius: 5,
+      borderColor: "#6D6D6D",
+      paddingHorizontal: 8,
+      height: 40,
+      width: "75%",
+      fontSize: 18,
+      fontFamily: "montserrat",
     },
   });
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.detailsCard}>
-        <View style={styles.header}>
-          <TextBold22>My Profile</TextBold22>
-        </View>
-        <View style={styles.alignRow}>
-          <Text20>Name - </Text20>
-          <Text20>{userDetails?.full_name}</Text20>
-        </View>
-        <View style={styles.alignRow}>
-          <Text20>Email - </Text20>
-          <Text20>{userDetails?.email}</Text20>
-        </View>
-        <Text20>Address:-</Text20>
-        {userDetails?.address !== undefined && (
-          <Text20>{userDetails?.address}</Text20>
-        )}
-        {userDetails?.address === undefined ? (
-          <>
-            <TextInputGrey />
-            <YellowButton>Add Address</YellowButton>
-          </>
-        ) : null}
-        <YellowButton>Modify Details</YellowButton>
-      </View>
+      <Spinner visible={loading} />
+      {!loading && (
+        <>
+          <View style={styles.detailsCard}>
+            <View style={styles.header}>
+              <TextBold22>My Profile</TextBold22>
+            </View>
+            <View style={styles.alignRow}>
+              <Text20>Name - </Text20>
+              {!modifyMode && <Text20>{userDetails?.full_name}</Text20>}
+              {modifyMode && (
+                <TextInputGrey
+                  value={modifyInputValues.full_name}
+                  onChangeText={modifyChangedHandler.bind(this, "full_name")}
+                  style={styles.nameTextInput}
+                />
+              )}
+            </View>
+            <View style={styles.alignRow}>
+              <Text20>Email - </Text20>
+              <Text20>{userDetails?.email}</Text20>
+            </View>
+            <Text20>Address:-</Text20>
+            {userDetails?.address.length > 1 && !modifyMode && (
+              <Text20>{userDetails?.address}</Text20>
+            )}
+            {modifyMode && (
+              <TextInputGrey
+                value={modifyInputValues.address}
+                onChangeText={modifyChangedHandler.bind(this, "address")}
+              />
+            )}
+            {userDetails?.address.length < 1 ? (
+              <>
+                <TextInputGrey
+                  onChangeText={(text) => setAddressInputValues(text)}
+                />
+                <YellowButton onPress={addAddressHandler}>
+                  Add Address
+                </YellowButton>
+              </>
+            ) : null}
+            <YellowButton onPress={modifyModeToggle}>
+              {modifyMode ? "Cancel" : "Modify Details"}
+            </YellowButton>
+            {modifyMode && (
+              <YellowButton onPress={modifySubmitHandler}>
+                Update Details
+              </YellowButton>
+            )}
+          </View>
+        </>
+      )}
     </View>
   );
 };
