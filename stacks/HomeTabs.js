@@ -8,6 +8,7 @@ import { Image } from "react-native";
 import profileIconTab from "../assets/icons/ProfileIconTab.png";
 import cartIcon from "../assets/icons/CartIcon.png";
 import sellIcon from "../assets/icons/SellIcon.png";
+import SellStackScreen from "./SellStackScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,6 +19,7 @@ function HomeTabs() {
         tabBarStyle: {
           backgroundColor: "#FEB700",
         },
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tab.Screen
@@ -51,8 +53,8 @@ function HomeTabs() {
         }}
       />
       <Tab.Screen
-        name="sell"
-        component={SellItem}
+        name="sellStack"
+        component={SellStackScreen}
         options={{
           title: "Sell An Item",
           headerStyle: { backgroundColor: "#FEB700" },

@@ -1,6 +1,19 @@
 import { Pressable, Text, StyleSheet } from "react-native";
 
-const TransparentButton = ({ onPress, children }) => {
+const TransparentButton = ({ onPress, children, width }) => {
+  const styles = StyleSheet.create({
+    forgotPassword: {
+      width: width ? width : "100%",
+      alignItems: "center",
+    },
+    forgotPasswordText: {
+      fontSize: 14,
+      color: "#0066C4",
+      letterSpacing: 0.5,
+      fontFamily: "montserrat",
+    },
+  });
+
   return (
     <Pressable
       style={styles.forgotPassword}
@@ -11,18 +24,5 @@ const TransparentButton = ({ onPress, children }) => {
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  forgotPassword: {
-    width: "100%",
-    alignItems: "center",
-  },
-  forgotPasswordText: {
-    fontSize: 14,
-    color: "#0066C4",
-    letterSpacing: 0.5,
-    fontFamily: "montserrat",
-  },
-});
 
 export default TransparentButton;
