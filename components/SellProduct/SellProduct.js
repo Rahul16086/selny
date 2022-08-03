@@ -16,9 +16,14 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
+import { ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../config/firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import "react-native-get-random-values";
+import { v4 } from "uuid";
 
 const SellProduct = () => {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
   const [pickedLocation, setPickedLocation] = useState(undefined);
   const Navigation = useNavigation();
   const Route = useRoute();
@@ -34,16 +39,20 @@ const SellProduct = () => {
   }, [Route, isFocused]);
 
   const pickImage = async () => {
+    if (image.length > 3) {
+      Alert.alert("Images Limit Reached", "You can only pick 4 images");
+      return;
+    }
+
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 1,
+      allowsMultipleSelection: true,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
-      setImage(result.uri);
+      setImage((old) => [...old, result.uri]);
     }
   };
 
@@ -78,6 +87,44 @@ const SellProduct = () => {
     });
   };
 
+  const uploadImage = async () => {
+    if (!image || image.length === 0) {
+      Alert.alert("No Image Picked", "Please pick an image to upload");
+      return;
+    }
+    image.forEach(async (image) => {
+      try {
+        const currentUserId = await AsyncStorage.getItem("token");
+        const imageRef = ref(storage, "sell/" + currentUserId + "/" + v4());
+        //convert image to bytes as it is in string format
+        const finalImage = await fetch(image);
+        const finalImageBytes = await finalImage.blob();
+        const imageUploadState = await uploadBytes(imageRef, finalImageBytes);
+        console.log("Image Uploaded " + imageUploadState.ref);
+      } catch (error) {
+        console.log(error);
+        Alert.alert("Image Upload Failed", "Please try again");
+      }
+    });
+  };
+
+  const clearImageHandler = () => {
+    console.log("Clearing Image");
+    Alert.alert(
+      "Clear Images🗑️",
+      "Are you sure you want to clear all the image picked?",
+      [
+        { text: "No", style: "cancel" },
+        {
+          text: "Yes",
+          style: "destructive",
+          onPress: () => {
+            setImage([]);
+          },
+        },
+      ]
+    );
+  };
   return (
     <View style={sellProductStyles.mainContainer}>
       <ScrollView>
@@ -115,11 +162,29 @@ const SellProduct = () => {
             />
           </>
         ) : (
-          <TextBold18>No location picked</TextBold18>
+          <View style={sellProductStyles.noLocation}>
+            <TextBold18>No location picked</TextBold18>
+          </View>
         )}
-        {image && <TextBold18>{image}</TextBold18>}
+        {image?.length > 0 && (
+          <>
+            <TextBold18>Selected Image(s)</TextBold18>
+            <View style={sellProductStyles.imagePreview}>
+              {image.map((image) => (
+                <Image
+                  source={{ uri: image }}
+                  style={sellProductStyles.selectedImage}
+                  key={image}
+                />
+              ))}
+            </View>
+          </>
+        )}
         <YellowButton onPress={pickImage}>Add Images</YellowButton>
-        <YellowButton>Post</YellowButton>
+        {image.length > 0 && (
+          <YellowButton onPress={clearImageHandler}>Clear Images</YellowButton>
+        )}
+        <YellowButton onPress={uploadImage}>Post</YellowButton>
       </ScrollView>
     </View>
   );
@@ -140,11 +205,30 @@ const sellProductStyles = StyleSheet.create({
     justifyContent: "space-evenly",
     height: 30,
   },
+  noLocation: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 20,
+    marginVertical: 5,
+  },
   pickedLocation: {
     alignItems: "center",
     justifyContent: "center",
     height: 40,
     marginVertical: 10,
+  },
+  imagePreview: {
+    flexDirection: "row",
+    width: "100%",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
+    marginVertical: 5,
+  },
+  selectedImage: {
+    width: "33%",
+    height: 150,
+    marginVertical: 5,
+    resizeMode: "contain",
   },
 });
 
