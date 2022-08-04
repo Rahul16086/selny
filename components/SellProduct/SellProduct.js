@@ -16,7 +16,7 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../../config/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
@@ -120,9 +120,9 @@ const SellProduct = () => {
         const finalImageBytes = await finalImage.blob();
         const imageUploadState = await uploadBytes(imageRef, finalImageBytes);
         // console.log("Image Uploaded " + imageUploadState.ref);
-        uploadedImageLinks.push(
-          imageUploadState.ref.bucket + "/" + imageUploadState.ref.fullPath
-        );
+        const downloadableUrl = await getDownloadURL(imageUploadState.ref);
+        console.log("Downloadable Url: " + downloadableUrl);
+        uploadedImageLinks.push(downloadableUrl);
       } catch (error) {
         console.log(error);
         Alert.alert("Image Upload Failed", "Please try again");
