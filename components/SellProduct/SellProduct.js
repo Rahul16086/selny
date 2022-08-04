@@ -37,6 +37,7 @@ const SellProduct = () => {
     location: { lat: "", lng: "" },
     imageLinks: [],
   });
+  const uploadedImageLinks = [];
 
   const inputChangedHandler = (inputIdentifier, enteredValue) => {
     setItemInfo((currentInputValue) => {
@@ -46,7 +47,7 @@ const SellProduct = () => {
       };
     });
   };
-  console.log(itemInfo);
+
   useEffect(() => {
     if (isFocused && Route.params) {
       setPickedLocation({
@@ -105,23 +106,48 @@ const SellProduct = () => {
     });
   };
 
-  const uploadImage = async () => {
+  const uploadImageAndFinalItemInfo = () => {
     if (!image || image.length === 0) {
       Alert.alert("No Image Picked", "Please pick an image to upload");
       return;
     }
-    image.forEach(async (image) => {
+    image.forEach(async (singleImage) => {
       try {
         const currentUserId = await AsyncStorage.getItem("token");
         const imageRef = ref(storage, "sell/" + currentUserId + "/" + v4());
         //convert image to bytes as it is in string format
-        const finalImage = await fetch(image);
+        const finalImage = await fetch(singleImage);
         const finalImageBytes = await finalImage.blob();
         const imageUploadState = await uploadBytes(imageRef, finalImageBytes);
-        console.log("Image Uploaded " + imageUploadState.ref);
+        // console.log("Image Uploaded " + imageUploadState.ref);
+        uploadedImageLinks.push(
+          imageUploadState.ref.bucket + "/" + imageUploadState.ref.fullPath
+        );
       } catch (error) {
         console.log(error);
         Alert.alert("Image Upload Failed", "Please try again");
+      }
+      console.log("uploaded info: ", uploadedImageLinks);
+      if (uploadedImageLinks.length === image.length) {
+        console.log("Image Upload Done");
+        try {
+          const currentUserId = await AsyncStorage.getItem("token");
+          const finalInfo = {
+            ...itemInfo,
+            location: pickedLocation,
+            imageLinks: uploadedImageLinks,
+          };
+
+          console.log(finalInfo);
+
+          await setDoc(
+            doc(db, "users/" + currentUserId + "/itemsToSell/" + v4()),
+            finalInfo
+          );
+        } catch (error) {
+          console.log(error);
+          Alert.alert("Error", "DB Error occurred");
+        }
       }
     });
   };
@@ -144,8 +170,11 @@ const SellProduct = () => {
     );
   };
 
-  const submitHandler = async () => {
-    console.log("Submitting");
+  const clearLocationHandler = () => {
+    setPickedLocation(undefined);
+  };
+
+  const verifyEnteredInfoAndUploadedImages = () => {
     if (
       itemInfo.item_name.length < 3 ||
       itemInfo.price.length < 1 ||
@@ -153,30 +182,24 @@ const SellProduct = () => {
       itemInfo.year.length !== 4
     ) {
       Alert.alert("Incorrect details!", "Please check the details entered");
+      return false;
     } else if (!pickedLocation) {
       Alert.alert("No Location Picked", "Please pick a location");
-      return;
+      return false;
     } else if (image.length === 0) {
       Alert.alert("No Image Picked", "Please pick an image to upload");
-      return;
+      return false;
     }
-    const finalInfo = {
-      ...itemInfo,
-      location: pickedLocation,
-      imageLinks: image,
-    };
-    console.log(finalInfo);
-    try {
-      const currentUserId = await AsyncStorage.getItem("token");
-      await setDoc(
-        doc(db, "users/" + currentUserId + "/itemsToSell/" + v4()),
-        finalInfo
-      );
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "DB Error occurred");
+    return true;
+  };
+
+  const submitHandler = async () => {
+    console.log("Submitting");
+    if (verifyEnteredInfoAndUploadedImages()) {
+      uploadImageAndFinalItemInfo();
     }
   };
+
   return (
     <View style={sellProductStyles.mainContainer}>
       <ScrollView>
@@ -222,6 +245,11 @@ const SellProduct = () => {
             <TextBold18>No location picked</TextBold18>
           </View>
         )}
+        <View style={sellProductStyles.clearLocation}>
+          <TransparentButton onPress={clearLocationHandler}>
+            Clear Location
+          </TransparentButton>
+        </View>
         {image?.length > 0 && (
           <>
             <TextBold18>Selected Image(s)</TextBold18>
@@ -236,6 +264,7 @@ const SellProduct = () => {
             </View>
           </>
         )}
+
         <YellowButton onPress={pickImage}>Add Images</YellowButton>
         {image.length > 0 && (
           <YellowButton onPress={clearImageHandler}>Clear Images</YellowButton>
@@ -272,6 +301,10 @@ const sellProductStyles = StyleSheet.create({
     justifyContent: "center",
     height: 40,
     marginVertical: 10,
+  },
+  clearLocation: {
+    height: 30,
+    justifyContent: "center",
   },
   imagePreview: {
     flexDirection: "row",
