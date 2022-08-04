@@ -63,8 +63,18 @@ const Products = ({ navigation }) => {
         <Text style={styles.locationText}> G4 0AJ, Glasgow, UK</Text>
       </View>
       <View style={styles.buttons}>
-        <YellowButtonSmall onPress={toggleNewItems}>New</YellowButtonSmall>
-        <YellowButtonSmall onPress={toggleUsedItems}>Used</YellowButtonSmall>
+        <YellowButtonSmall
+          onPress={toggleNewItems}
+          backgroundColor={newItemsToggle ? "#FEB700" : "transparent"}
+        >
+          New
+        </YellowButtonSmall>
+        <YellowButtonSmall
+          onPress={toggleUsedItems}
+          backgroundColor={!newItemsToggle ? "#FEB700" : "transparent"}
+        >
+          Used
+        </YellowButtonSmall>
       </View>
       {newItemsToggle && (
         <View style={{ flex: 1 }}>
