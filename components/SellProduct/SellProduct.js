@@ -17,10 +17,11 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { ref, uploadBytes } from "firebase/storage";
-import { storage } from "../../config/firebase";
+import { db, storage } from "../../config/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
+import { doc, setDoc } from "firebase/firestore";
 
 const SellProduct = () => {
   const [image, setImage] = useState([]);
@@ -28,7 +29,24 @@ const SellProduct = () => {
   const Navigation = useNavigation();
   const Route = useRoute();
   const isFocused = useIsFocused();
+  const [itemInfo, setItemInfo] = useState({
+    item_name: "",
+    description: "",
+    price: "",
+    year: "",
+    location: { lat: "", lng: "" },
+    imageLinks: [],
+  });
 
+  const inputChangedHandler = (inputIdentifier, enteredValue) => {
+    setItemInfo((currentInputValue) => {
+      return {
+        ...currentInputValue,
+        [inputIdentifier]: enteredValue,
+      };
+    });
+  };
+  console.log(itemInfo);
   useEffect(() => {
     if (isFocused && Route.params) {
       setPickedLocation({
@@ -125,17 +143,55 @@ const SellProduct = () => {
       ]
     );
   };
+
+  const submitHandler = async () => {
+    console.log("Submitting");
+    if (
+      itemInfo.item_name.length < 3 ||
+      itemInfo.price.length < 1 ||
+      itemInfo.description.length < 5 ||
+      itemInfo.year.length !== 4
+    ) {
+      Alert.alert("Incorrect details!", "Please check the details entered");
+    } else if (!pickedLocation) {
+      Alert.alert("No Location Picked", "Please pick a location");
+      return;
+    } else if (image.length === 0) {
+      Alert.alert("No Image Picked", "Please pick an image to upload");
+      return;
+    }
+    const finalInfo = {
+      ...itemInfo,
+      location: pickedLocation,
+      imageLinks: image,
+    };
+    console.log(finalInfo);
+    try {
+      const currentUserId = await AsyncStorage.getItem("token");
+      await setDoc(
+        doc(db, "users/" + currentUserId + "/itemsToSell/" + v4()),
+        finalInfo
+      );
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "DB Error occurred");
+    }
+  };
   return (
     <View style={sellProductStyles.mainContainer}>
       <ScrollView>
         <TextBold18>Item name</TextBold18>
-        <TextInputGrey />
+        <TextInputGrey
+          onChangeText={inputChangedHandler.bind(this, "item_name")}
+        />
         <TextBold18>Description</TextBold18>
-        <TextInputGrey />
+        <TextInputGrey
+          onChangeText={inputChangedHandler.bind(this, "description")}
+        />
         <TextBold18>Price</TextBold18>
-        <TextInputGrey />
+        <TextInputGrey onChangeText={inputChangedHandler.bind(this, "price")} />
         <TextBold18>Year</TextBold18>
-        <TextInputGrey />
+        <TextInputGrey onChangeText={inputChangedHandler.bind(this, "year")} />
         <TextBold18>Location</TextBold18>
         <View style={sellProductStyles.locationOptions}>
           <TransparentButton onPress={getLocationHandler} width="45%">
@@ -184,7 +240,7 @@ const SellProduct = () => {
         {image.length > 0 && (
           <YellowButton onPress={clearImageHandler}>Clear Images</YellowButton>
         )}
-        <YellowButton onPress={uploadImage}>Post</YellowButton>
+        <YellowButton onPress={submitHandler}>Post</YellowButton>
       </ScrollView>
     </View>
   );
