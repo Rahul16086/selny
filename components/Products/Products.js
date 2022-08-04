@@ -6,9 +6,12 @@ import locationPin from "../../assets/icons/locationPin.png";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase";
+import TextBold18 from "../UI/Text/TextBold18";
+import { useIsFocused } from "@react-navigation/native";
 
 const Products = ({ navigation }) => {
   const [newItemsToggle, setNewItemsToggle] = useState(true);
+  const isFocused = useIsFocused();
 
   const productInfo = [
     { key: "Item1", name: "Apple iPhone 13 Pro" },
@@ -35,13 +38,17 @@ const Products = ({ navigation }) => {
     const getUsedItems = async () => {
       const docs = await getDocs(collection(db, "itemsToSell"));
       if (docs.size !== usedItemsData.length) {
+        const itemData = [];
         docs.forEach((doc) => {
-          setUsedItemsData((old) => [...old, doc.data()]);
+          itemData.push(doc.data());
+          if (itemData.length === docs.size) {
+            setUsedItemsData(itemData);
+          }
         });
       }
     };
     getUsedItems();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.mainContainer}>
@@ -66,7 +73,19 @@ const Products = ({ navigation }) => {
       )}
       {!newItemsToggle && (
         <View style={{ flex: 1 }}>
-          <ProductList productInfo={usedItemsData} navigation={navigation} />
+          {usedItemsData.length > 0 ? (
+            <ProductList productInfo={usedItemsData} navigation={navigation} />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <TextBold18>No Items Found</TextBold18>
+            </View>
+          )}
         </View>
       )}
     </View>

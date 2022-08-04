@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ManagePost from "../screens/ManagePost";
 import MyOrders from "../screens/MyOrders";
 import MyOrdersDetailedView from "../screens/MyOrdersDetailedView";
 import MyProfile from "../screens/MyProfile";
@@ -27,6 +28,11 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="myProfile"
         component={MyProfile}
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
+        name="managePost"
+        component={ManagePost}
         options={{ headerShown: false }}
       />
     </ProfileStack.Navigator>

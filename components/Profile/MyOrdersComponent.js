@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, StatusBar, ScrollView } from "react-native";
+import { StyleSheet, StatusBar, ScrollView } from "react-native";
 import React from "react";
 import OrdersBanner from "../UI/Banner/OrdersBanner";
 

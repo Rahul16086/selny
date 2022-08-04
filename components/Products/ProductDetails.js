@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import OrangeButton from "../UI/Buttons/OrangeButton";
 import YellowButton from "../UI/Buttons/YellowButton";
 import Text20 from "../UI/Text/Text20";

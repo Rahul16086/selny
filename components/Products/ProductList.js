@@ -1,5 +1,7 @@
 import { FlatList } from "react-native";
 import ProductTile from "./ProductTile";
+import "react-native-get-random-values";
+import { v4 } from "uuid";
 
 const ProductList = ({ productInfo, navigation }) => {
   return (
@@ -8,7 +10,7 @@ const ProductList = ({ productInfo, navigation }) => {
       renderItem={({ item }) => (
         <ProductTile navigation={navigation} item={item} />
       )}
-      keyExtractor={(item) => item.key}
+      key={v4()}
       numColumns={2}
       contentContainerStyle={{
         justifyContent: "center",

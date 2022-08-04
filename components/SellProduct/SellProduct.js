@@ -22,8 +22,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
+import Spinner from "react-native-loading-spinner-overlay/lib";
 
 const SellProduct = () => {
+  const [loading, setLoading] = useState(false);
   const [image, setImage] = useState([]);
   const [pickedLocation, setPickedLocation] = useState(undefined);
   const Navigation = useNavigation();
@@ -38,6 +40,7 @@ const SellProduct = () => {
     imageLinks: [],
   });
   const uploadedImageLinks = [];
+  const images = [];
 
   const inputChangedHandler = (inputIdentifier, enteredValue) => {
     setItemInfo((currentInputValue) => {
@@ -107,6 +110,7 @@ const SellProduct = () => {
   };
 
   const uploadImageAndFinalItemInfo = () => {
+    setLoading(true);
     if (!image || image.length === 0) {
       Alert.alert("No Image Picked", "Please pick an image to upload");
       return;
@@ -119,7 +123,8 @@ const SellProduct = () => {
         const finalImage = await fetch(singleImage);
         const finalImageBytes = await finalImage.blob();
         const imageUploadState = await uploadBytes(imageRef, finalImageBytes);
-        // console.log("Image Uploaded " + imageUploadState.ref);
+        console.log("Image Uploaded " + imageUploadState.metadata.name);
+        images.push(imageUploadState.metadata.name);
         const downloadableUrl = await getDownloadURL(imageUploadState.ref);
         console.log("Downloadable Url: " + downloadableUrl);
         uploadedImageLinks.push(downloadableUrl);
@@ -127,7 +132,7 @@ const SellProduct = () => {
         console.log(error);
         Alert.alert("Image Upload Failed", "Please try again");
       }
-      console.log("uploaded info: ", uploadedImageLinks);
+      // console.log("uploaded info: ", uploadedImageLinks);
       if (uploadedImageLinks.length === image.length) {
         console.log("Image Upload Done");
         try {
@@ -136,17 +141,21 @@ const SellProduct = () => {
             ...itemInfo,
             location: pickedLocation,
             imageLinks: uploadedImageLinks,
+            images: images,
             userId: currentUserId,
+            datePosted: new Date().toLocaleDateString(),
+            status: "Live",
           };
 
-          console.log(finalInfo);
-
           await setDoc(doc(db, "itemsToSell/" + v4()), finalInfo);
+          Navigation.navigate("managePost");
+          setLoading(false);
         } catch (error) {
           console.log(error);
           Alert.alert("Error", "DB Error occurred");
         }
       }
+      setLoading(false);
     });
   };
 
@@ -200,6 +209,7 @@ const SellProduct = () => {
 
   return (
     <View style={sellProductStyles.mainContainer}>
+      <Spinner visible={loading} />
       <ScrollView>
         <TextBold18>Item name</TextBold18>
         <TextInputGrey

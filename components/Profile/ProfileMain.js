@@ -87,7 +87,11 @@ const ProfileMain = () => {
           text={"My Profile"}
           onPress={() => Navigation.navigate("myProfile")}
         />
-        <ShadowIconButton icon={faqIcon} text={"FAQ"} />
+        <ShadowIconButton
+          icon={faqIcon}
+          text={"Manage Posts"}
+          onPress={() => Navigation.navigate("managePost")}
+        />
         <ShadowIconButton icon={bellIcon} text={"Notification"} />
       </View>
       <View style={styles.signOutContainer}>
