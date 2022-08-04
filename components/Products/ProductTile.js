@@ -8,14 +8,21 @@ const ProductTile = ({ item, navigation }) => {
     <Pressable
       style={styles.container}
       android_ripple={{ color: "6d6d6d" }}
-      onPress={() => navigation.navigate("productDetails")}
+      onPress={() => navigation.navigate("productDetails", { item: item })}
     >
       <View style={styles.imageContainer}>
-        <Image source={productImage} style={styles.image} />
+        <Image
+          source={
+            item?.imageLinks?.length > 0
+              ? { uri: item?.imageLinks[0] }
+              : productImage
+          }
+          style={styles.image}
+        />
       </View>
       <View style={styles.textContainer}>
-        <Text12>{item.name}</Text12>
-        <TextBold18>£ 1149</TextBold18>
+        <Text12>{item.item_name}</Text12>
+        <TextBold18>£ {item.price}</TextBold18>
       </View>
     </Pressable>
   );
@@ -43,6 +50,9 @@ const styles = StyleSheet.create({
   },
   image: {
     height: "100%",
+    width: "100%",
+    resizeMode: "contain",
+    borderRadius: 5,
   },
   textContainer: {
     width: "100%",

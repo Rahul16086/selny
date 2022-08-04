@@ -3,8 +3,13 @@ import YellowButtonSmall from "../UI/Buttons/YellowButtonSmall";
 import ProductList from "./ProductList";
 import searchIcon from "../../assets/icons/Searchicon.png";
 import locationPin from "../../assets/icons/locationPin.png";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 const Products = ({ navigation }) => {
+  const [newItemsToggle, setNewItemsToggle] = useState(true);
+
   const productInfo = [
     { key: "Item1", name: "Apple iPhone 13 Pro" },
     { key: "Item2", name: "Apple iPhone 13 Pro" },
@@ -15,6 +20,29 @@ const Products = ({ navigation }) => {
     { key: "Item7", name: "Apple iPhone 13 Pro" },
     { key: "Item8", name: "Apple iPhone 13 Pro" },
   ];
+  const [usedItemsData, setUsedItemsData] = useState([]);
+
+  const toggleUsedItems = () => {
+    setNewItemsToggle(false);
+  };
+
+  const toggleNewItems = () => {
+    setNewItemsToggle(true);
+  };
+
+  useEffect(() => {
+    //initialize used items data from firestore
+    const getUsedItems = async () => {
+      const docs = await getDocs(collection(db, "itemsToSell"));
+      if (docs.size !== usedItemsData.length) {
+        docs.forEach((doc) => {
+          setUsedItemsData((old) => [...old, doc.data()]);
+        });
+      }
+    };
+    getUsedItems();
+  }, []);
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.searchBarContainer}>
@@ -28,12 +56,19 @@ const Products = ({ navigation }) => {
         <Text style={styles.locationText}> G4 0AJ, Glasgow, UK</Text>
       </View>
       <View style={styles.buttons}>
-        <YellowButtonSmall>New</YellowButtonSmall>
-        <YellowButtonSmall>Used</YellowButtonSmall>
+        <YellowButtonSmall onPress={toggleNewItems}>New</YellowButtonSmall>
+        <YellowButtonSmall onPress={toggleUsedItems}>Used</YellowButtonSmall>
       </View>
-      <View style={{ flex: 1 }}>
-        <ProductList productInfo={productInfo} navigation={navigation} />
-      </View>
+      {newItemsToggle && (
+        <View style={{ flex: 1 }}>
+          <ProductList productInfo={productInfo} navigation={navigation} />
+        </View>
+      )}
+      {!newItemsToggle && (
+        <View style={{ flex: 1 }}>
+          <ProductList productInfo={usedItemsData} navigation={navigation} />
+        </View>
+      )}
     </View>
   );
 };

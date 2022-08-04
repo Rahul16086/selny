@@ -1,22 +1,62 @@
+import { useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
-import productImageHiRes from "../../assets/productImageHiRes.png";
 import OrangeButton from "../UI/Buttons/OrangeButton";
 import YellowButton from "../UI/Buttons/YellowButton";
+import Text20 from "../UI/Text/Text20";
+import Slideshow from "react-native-image-slider-show";
+import Spinner from "react-native-loading-spinner-overlay/lib";
 
 const ProductDetails = () => {
+  const [currentItemData, setCurrentItemData] = useState({});
+  const [imagesLinks, setImagesLinks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const Route = useRoute();
+
+  useEffect(() => {
+    setLoading(true);
+    setCurrentItemData(Route.params.item);
+    const images = Route.params.item.imageLinks; //transforming image links as object with url as key for slideshow component
+    if (images.length !== imagesLinks.length) {
+      images.forEach((url) => {
+        setImagesLinks((prevImagesLinks) => [...prevImagesLinks, { url: url }]);
+      });
+      setLoading(false);
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image source={productImageHiRes} style={styles.image} />
-      </View>
+      <Spinner visible={loading} />
+      {!loading && (
+        <View style={styles.imageContainer}>
+          <Slideshow
+            dataSource={imagesLinks}
+            height={300}
+            indicatorColor={"CF4000"}
+            arrowSize={20}
+          />
+        </View>
+      )}
       <View style={styles.productInfo}>
-        <Text style={styles.productBrand}>Apple</Text>
-        <Text style={styles.productName}>iPhone 13 Pro (256GB) - Graphite</Text>
-        <Text style={styles.productRating}>⭐⭐⭐⭐ 4.5 (750)</Text>
+        {currentItemData.brand && (
+          <Text style={styles.productBrand}>Apple</Text>
+        )}
+        <Text style={styles.productName}>{currentItemData.item_name}</Text>
+        <Text20>{currentItemData.description}</Text20>
+        {currentItemData.rating && (
+          <Text style={styles.productRating}>⭐⭐⭐⭐ 4.5 (750)</Text>
+        )}
         <View style={styles.productPrice}>
           <Text style={styles.productPricePound}>£</Text>
-          <Text style={styles.productPriceNumber}>1149.00</Text>
+          <Text style={styles.productPriceNumber}>{currentItemData.price}</Text>
         </View>
+        {currentItemData.location && (
+          <>
+            <Text20>Lat: {currentItemData.location.lat}</Text20>
+            <Text20>Lng: {currentItemData.location.lng}</Text20>
+          </>
+        )}
       </View>
       <View style={styles.buttonContainer}>
         <YellowButton width={"90%"}>Add to cart</YellowButton>
