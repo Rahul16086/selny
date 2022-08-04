@@ -136,14 +136,12 @@ const SellProduct = () => {
             ...itemInfo,
             location: pickedLocation,
             imageLinks: uploadedImageLinks,
+            userId: currentUserId,
           };
 
           console.log(finalInfo);
 
-          await setDoc(
-            doc(db, "users/" + currentUserId + "/itemsToSell/" + v4()),
-            finalInfo
-          );
+          await setDoc(doc(db, "itemsToSell/" + v4()), finalInfo);
         } catch (error) {
           console.log(error);
           Alert.alert("Error", "DB Error occurred");
