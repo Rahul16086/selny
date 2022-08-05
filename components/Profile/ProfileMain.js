@@ -16,10 +16,13 @@ import { getDoc, doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../config/firebase";
 import TextBold18 from "../UI/Text/TextBold18";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const ProfileMain = () => {
   const Navigation = useNavigation();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   const logoutHandler = async () => {
     await signOut(auth);
     dispatch(setAuthLogout({ isAuthenticated: false, token: "" }));
@@ -28,9 +31,9 @@ const ProfileMain = () => {
 
   const [user, setUser] = useState(null);
   const [storeAdmin, setStoreAdmin] = useState(false);
-
   useEffect(() => {
     const getUser = async () => {
+      setLoading(true);
       const userId = auth.currentUser.uid;
       const currentUserRef = doc(db, "users", userId);
       const userDbData = await getDoc(currentUserRef);
@@ -39,7 +42,9 @@ const ProfileMain = () => {
         if (userDbData.data().storeAdmin) {
           setStoreAdmin(true);
         }
+        setLoading(false);
       }
+      setLoading(false);
     };
     getUser();
   }, []);
@@ -69,47 +74,55 @@ const ProfileMain = () => {
       paddingBottom: 20,
     },
   });
-
   return (
-    <View style={styles.container}>
-      <View style={styles.avatarContainer}>
-        <Image source={avatar} />
-        <TextBold18>{user?.full_name}</TextBold18>
-      </View>
-      <View style={styles.myOrdersContainer}>
-        {!storeAdmin && (
-          <ShadowIconButton
-            icon={myOrdersIcon}
-            text={"My Orders"}
-            onPress={() => Navigation.navigate("myOrders")}
-          />
-        )}
-        {storeAdmin && (
-          <ShadowIconButton icon={myOrdersIcon} text={"Manage Stores"} />
-        )}
-      </View>
-      <View style={styles.otherActionsContainer}>
-        <ShadowIconButton
-          icon={profileIcon}
-          text={"My Profile"}
-          onPress={() => Navigation.navigate("myProfile")}
-        />
-        {!storeAdmin && (
-          <ShadowIconButton
-            icon={faqIcon}
-            text={"Manage Posts"}
-            onPress={() => Navigation.navigate("managePost")}
-          />
-        )}
-        {storeAdmin && (
-          <ShadowIconButton icon={faqIcon} text={"Manage Orders"} />
-        )}
-        <ShadowIconButton icon={bellIcon} text={"Notification"} />
-      </View>
-      <View style={styles.signOutContainer}>
-        <RedShadowButton text={"Sign Out"} onPress={logoutHandler} />
-      </View>
-    </View>
+    <>
+      <Spinner visible={loading} />
+      {!loading && (
+        <View style={styles.container}>
+          <View style={styles.avatarContainer}>
+            <Image source={avatar} />
+            <TextBold18>{user?.full_name}</TextBold18>
+          </View>
+          <View style={styles.myOrdersContainer}>
+            {!storeAdmin && (
+              <ShadowIconButton
+                icon={myOrdersIcon}
+                text={"My Orders"}
+                onPress={() => Navigation.navigate("myOrders")}
+              />
+            )}
+            {storeAdmin && (
+              <ShadowIconButton
+                icon={myOrdersIcon}
+                text={"Manage Stores"}
+                onPress={() => Navigation.navigate("manageStores")}
+              />
+            )}
+          </View>
+          <View style={styles.otherActionsContainer}>
+            <ShadowIconButton
+              icon={profileIcon}
+              text={"My Profile"}
+              onPress={() => Navigation.navigate("myProfile")}
+            />
+            {!storeAdmin && (
+              <ShadowIconButton
+                icon={faqIcon}
+                text={"Manage Posts"}
+                onPress={() => Navigation.navigate("managePost")}
+              />
+            )}
+            {storeAdmin && (
+              <ShadowIconButton icon={faqIcon} text={"Manage Orders"} />
+            )}
+            <ShadowIconButton icon={bellIcon} text={"Notification"} />
+          </View>
+          <View style={styles.signOutContainer}>
+            <RedShadowButton text={"Sign Out"} onPress={logoutHandler} />
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 

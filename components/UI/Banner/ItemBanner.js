@@ -3,6 +3,7 @@ import React from "react";
 import TextBold18 from "../Text/TextBold18";
 import goArrow from "../../../assets/icons/GoArrow.png";
 import Text12 from "../Text/Text12";
+import Text20 from "../Text/Text20";
 
 const ItemBanner = ({ item }) => {
   const styles = StyleSheet.create({
@@ -46,15 +47,21 @@ const ItemBanner = ({ item }) => {
 
   return (
     <Pressable style={styles.container} android_ripple={{ color: "#6d6d6d" }}>
-      <View style={styles.imageContainer}>
-        <Image source={{ uri: item.imageLinks[0] }} style={styles.image} />
-      </View>
+      {item.imageLinks && (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: item?.imageLinks[0] }} style={styles.image} />
+        </View>
+      )}
       <View style={styles.productInfoContainer}>
-        <TextBold18>{item.item_name}</TextBold18>
+        {item?.item_name && <TextBold18>{item?.item_name}</TextBold18>}
+        {item?.name && <TextBold18>{item.name}</TextBold18>}
+        {item?.category && <Text20>{item.category}</Text20>}
         {item?.status && <Text12>Status - {item?.status}</Text12>}
-        <Text style={styles.deliveredText}>
-          Posted on {item?.datePosted?.toString()}
-        </Text>
+        {item?.datePosted && (
+          <Text style={styles.deliveredText}>
+            Posted on {item?.datePosted?.toString()}
+          </Text>
+        )}
       </View>
       <View style={styles.goArrowContainer}>
         <Image source={goArrow} />
