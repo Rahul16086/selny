@@ -22,7 +22,7 @@ const SellNewItem = () => {
     description: "",
     price: 0,
     quantity_left: 0,
-    imagesLinks: [],
+    imageLinks: [],
   });
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -45,12 +45,30 @@ const SellNewItem = () => {
           fetchedData.push({ label: item.data().name, value: item.id });
           if (fetchedData.length === data.size) {
             setItems(fetchedData);
-            console.log(fetchedData);
           }
         });
       }
     };
     getStores();
+    if (
+      itemInfo.brand !== "" ||
+      itemInfo.item_name !== "" ||
+      itemInfo.description !== "" ||
+      itemInfo.price !== 0 ||
+      itemInfo.quantity_left !== 0 ||
+      images.length !== 0
+    ) {
+      setItemInfo({
+        brand: "",
+        item_name: "",
+        description: "",
+        price: 0,
+        quantity_left: 0,
+        imageLinks: [],
+      });
+      setValue(null);
+      setImages([]);
+    }
   }, [isFocused]);
 
   const pickImage = async () => {
@@ -124,18 +142,16 @@ const SellNewItem = () => {
           Alert.alert("Image Upload Failed", "Something went wrong");
         }
         if (uploadedImageLinks.length === images.length) {
-          console.log("Images Uploaded");
           try {
             const finalInfo = {
               ...itemInfo,
-              imagesLinks: uploadedImageLinks,
+              imageLinks: uploadedImageLinks,
               images: uploadedImages,
               storeId: value,
             };
-
+            console.log("final: ", finalInfo);
             await setDoc(doc(db, "newItems/" + v4()), finalInfo);
-            console.log("Item Added");
-            Navigation.navigate("manageStores");
+            Navigation.navigate("home");
           } catch (error) {
             console.log(error);
             Alert.alert("Error", "DB Error occurred");
@@ -166,20 +182,29 @@ const SellNewItem = () => {
     <View style={sellProductStyles.mainContainer}>
       <ScrollView>
         <TextBold18>Brand</TextBold18>
-        <TextInputGrey onChangeText={inputChangeHandler.bind(this, "brand")} />
+        <TextInputGrey
+          onChangeText={inputChangeHandler.bind(this, "brand")}
+          value={itemInfo.brand}
+        />
         <TextBold18>Item name</TextBold18>
         <TextInputGrey
           onChangeText={inputChangeHandler.bind(this, "item_name")}
+          value={itemInfo.item_name}
         />
         <TextBold18>Description</TextBold18>
         <TextInputGrey
           onChangeText={inputChangeHandler.bind(this, "description")}
+          value={itemInfo.description}
         />
         <TextBold18>Price</TextBold18>
-        <TextInputGrey onChangeText={inputChangeHandler.bind(this, "price")} />
+        <TextInputGrey
+          onChangeText={inputChangeHandler.bind(this, "price")}
+          value={itemInfo.price.toString()}
+        />
         <TextBold18>Quantity Left</TextBold18>
         <TextInputGrey
           onChangeText={inputChangeHandler.bind(this, "quantity_left")}
+          value={itemInfo.quantity_left.toString()}
         />
         <TextBold18>Store</TextBold18>
         <View>

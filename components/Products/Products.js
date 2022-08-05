@@ -12,17 +12,7 @@ import { useIsFocused } from "@react-navigation/native";
 const Products = ({ navigation }) => {
   const [newItemsToggle, setNewItemsToggle] = useState(true);
   const isFocused = useIsFocused();
-
-  const productInfo = [
-    { key: "Item1", name: "Apple iPhone 13 Pro" },
-    { key: "Item2", name: "Apple iPhone 13 Pro" },
-    { key: "Item3", name: "Apple iPhone 13 Pro" },
-    { key: "Item4", name: "Apple iPhone 13 Pro" },
-    { key: "Item5", name: "Apple iPhone 13 Pro" },
-    { key: "Item6", name: "Apple iPhone 13 Pro" },
-    { key: "Item7", name: "Apple iPhone 13 Pro" },
-    { key: "Item8", name: "Apple iPhone 13 Pro" },
-  ];
+  const [newItems, setNewItems] = useState([]);
   const [usedItemsData, setUsedItemsData] = useState([]);
 
   const toggleUsedItems = () => {
@@ -35,6 +25,16 @@ const Products = ({ navigation }) => {
 
   useEffect(() => {
     //initialize used items data from firestore
+    const getNewItems = async () => {
+      const docs = await getDocs(collection(db, "newItems"));
+      const newItems = [];
+      docs.forEach((item) => {
+        newItems.push(item.data());
+        if (newItems.length === docs.size) {
+          setNewItems(newItems);
+        }
+      });
+    };
     const getUsedItems = async () => {
       const docs = await getDocs(collection(db, "itemsToSell"));
       if (docs.size !== usedItemsData.length) {
@@ -47,6 +47,7 @@ const Products = ({ navigation }) => {
         });
       }
     };
+    getNewItems();
     getUsedItems();
   }, [isFocused]);
 
@@ -78,7 +79,19 @@ const Products = ({ navigation }) => {
       </View>
       {newItemsToggle && (
         <View style={{ flex: 1 }}>
-          <ProductList productInfo={productInfo} navigation={navigation} />
+          {newItems.length > 0 ? (
+            <ProductList productInfo={newItems} navigation={navigation} />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <TextBold18>No New Items Found</TextBold18>
+            </View>
+          )}
         </View>
       )}
       {!newItemsToggle && (

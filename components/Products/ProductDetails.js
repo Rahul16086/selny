@@ -23,6 +23,7 @@ const ProductDetails = () => {
       });
       setLoading(false);
     }
+    setLoading(false);
   }, []);
 
   return (
@@ -51,6 +52,13 @@ const ProductDetails = () => {
           <Text style={styles.productPricePound}>£</Text>
           <Text style={styles.productPriceNumber}>{currentItemData.price}</Text>
         </View>
+        {currentItemData.quantity_left && (
+          <Text20>
+            {currentItemData.quantity_left < 11
+              ? "Hurry! Only " + currentItemData.quantity_left + " left"
+              : currentItemData.quantity_left + " left"}
+          </Text20>
+        )}
         {currentItemData.location && (
           <>
             <Text20>Lat: {currentItemData.location.lat}</Text20>
@@ -81,7 +89,7 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   productInfo: {
-    height: "25%",
+    height: "28%",
     justifyContent: "space-evenly",
     alignItems: "flex-start",
     paddingHorizontal: 16,
