@@ -11,7 +11,9 @@ import { useDispatch } from "react-redux";
 import { setAuthLogin } from "../../store/redux/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../config/firebase";
+
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../config/firebase";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -53,6 +55,14 @@ const Login = () => {
           loginInputValues.password
         );
         if (user) {
+          const userId = user.user.uid;
+          const currentUserRef = doc(db, "users", userId);
+          const userDbData = await getDoc(currentUserRef);
+          if (userDbData.exists()) {
+            if (userDbData.data().storeAdmin) {
+              AsyncStorage.setItem("storeAdmin", "true");
+            }
+          }
           dispatch(
             setAuthLogin({ isAuthenticated: true, token: user.user.uid })
           );

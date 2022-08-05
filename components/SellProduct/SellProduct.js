@@ -160,7 +160,6 @@ const SellProduct = () => {
   };
 
   const clearImageHandler = () => {
-    console.log("Clearing Image");
     Alert.alert(
       "Clear Images🗑️",
       "Are you sure you want to clear all the image picked?",
@@ -283,7 +282,7 @@ const SellProduct = () => {
   );
 };
 
-const sellProductStyles = StyleSheet.create({
+export const sellProductStyles = StyleSheet.create({
   mainContainer: {
     padding: 10,
   },
