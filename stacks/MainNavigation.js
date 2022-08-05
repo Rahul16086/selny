@@ -5,6 +5,7 @@ import HomeTabs from "./HomeTabs";
 import LoginScreen from "../screens/Login";
 import SignUpScreen from "../screens/SignUp";
 import SignUpSuccess from "../screens/SignUpSuccess";
+import SellerAdditionalInfo from "../screens/SellerAdditionalInfo";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,13 @@ const MainNavigation = () => {
         <Stack.Screen
           name="signUpSuccess"
           component={SignUpSuccess}
+          options={{ headerShown: false }}
+        />
+      )}
+      {!isAuthenticated && (
+        <Stack.Screen
+          name="sellerAdditionalInfo"
+          component={SellerAdditionalInfo}
           options={{ headerShown: false }}
         />
       )}

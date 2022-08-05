@@ -97,8 +97,15 @@ const Login = () => {
         >
           <Image source={googleLogo} />
         </Pressable>
-        <YellowButton onPress={() => navigation.navigate("signUp")}>
+        <YellowButton
+          onPress={() => navigation.navigate("signUp", { signUp: true })}
+        >
           Create Account
+        </YellowButton>
+        <YellowButton
+          onPress={() => navigation.navigate("signUp", { signUp: false })}
+        >
+          Register as Seller
         </YellowButton>
       </View>
     </View>
@@ -131,8 +138,8 @@ export const styles = StyleSheet.create({
   otherSignInOptions: {
     width: "90%",
     alignItems: "center",
-    height: 130,
-    justifyContent: "space-between",
+    height: 180,
+    justifyContent: "space-evenly",
   },
 });
 

@@ -5,10 +5,11 @@ import TextInputGrey from "../UI/Input/TextInputGrey";
 import TextBold18 from "../UI/Text/TextBold18";
 import { styles } from "./Login";
 import logo from "../../assets/Logo.png";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { auth } from "../../config/firebase";
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   sendEmailVerification,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -18,6 +19,8 @@ const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/; //looks
 
 const SignUp = () => {
   const Navigation = useNavigation();
+  const Route = useRoute();
+
   const [signUpInputValues, setSignUpInputValues] = useState({
     fullName: "",
     email: "",
@@ -66,12 +69,20 @@ const SignUp = () => {
 
         if (signUp) {
           console.log("sending...", auth.currentUser.email);
-          await setDoc(doc(db, "users", auth.currentUser.uid), {
+          let docRef = doc(db, "users", auth.currentUser.uid);
+          const storeAdmin = !Route.params.signUp;
+
+          await setDoc(docRef, {
             full_name: signUpInputValues.fullName,
             email: signUpInputValues.email,
+            storeAdmin: storeAdmin,
           });
           // const email = await sendEmailVerification(auth.currentUser);
-          Navigation.navigate("signUpSuccess");
+          if (Route.params.signUp === false) {
+            Navigation.navigate("sellerAdditionalInfo");
+          } else {
+            Navigation.navigate("signUpSuccess");
+          }
         }
       } catch (error) {
         console.log("error", error);
@@ -111,7 +122,9 @@ const SignUp = () => {
           onChangeText={inputChangedHandler.bind(this, "confirmPassword")}
           value={signUpInputValues.confirmPassword}
         />
-        <YellowButton onPress={submitHandler}>Create Account</YellowButton>
+        <YellowButton onPress={submitHandler}>
+          {Route.params.signUp ? "Create Account" : "Next"}
+        </YellowButton>
         <YellowButton onPress={() => Navigation.goBack()}>
           Back to login
         </YellowButton>

@@ -34,8 +34,7 @@ const MyProfileDetails = () => {
       const currentUserRef = doc(db, "users", userId);
       const userDbData = await getDoc(currentUserRef);
       if (userDbData.exists()) {
-        setUserDetails(userDbData.data());
-        console.log("user: ", userDbData.data());
+        setUserDetails({ address: "", ...userDbData.data() });
         setLoading(false);
       }
     };
@@ -139,6 +138,10 @@ const MyProfileDetails = () => {
       fontSize: 18,
       fontFamily: "montserrat",
     },
+    actions: {
+      width: "100%",
+      marginTop: 10,
+    },
   });
   return (
     <View style={styles.mainContainer}>
@@ -184,14 +187,17 @@ const MyProfileDetails = () => {
                 </YellowButton>
               </>
             ) : null}
-            <YellowButton onPress={modifyModeToggle}>
-              {modifyMode ? "Cancel" : "Modify Details"}
-            </YellowButton>
-            {modifyMode && (
-              <YellowButton onPress={modifySubmitHandler}>
-                Update Details
+            {userDetails.storeProof && <Text20>Store Proof - Yes</Text20>}
+            <View style={styles.actions}>
+              <YellowButton onPress={modifyModeToggle}>
+                {modifyMode ? "Cancel" : "Modify Details"}
               </YellowButton>
-            )}
+              {modifyMode && (
+                <YellowButton onPress={modifySubmitHandler}>
+                  Update Details
+                </YellowButton>
+              )}
+            </View>
           </View>
         </>
       )}

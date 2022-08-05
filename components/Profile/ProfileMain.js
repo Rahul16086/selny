@@ -27,16 +27,18 @@ const ProfileMain = () => {
   };
 
   const [user, setUser] = useState(null);
+  const [storeAdmin, setStoreAdmin] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
-      const userId = await AsyncStorage.getItem("token");
-      console.log("userId: ", userId);
+      const userId = auth.currentUser.uid;
       const currentUserRef = doc(db, "users", userId);
       const userDbData = await getDoc(currentUserRef);
       if (userDbData.exists()) {
         setUser(userDbData.data());
-        console.log("user: ", userDbData.data());
+        if (userDbData.data().storeAdmin) {
+          setStoreAdmin(true);
+        }
       }
     };
     getUser();
@@ -75,11 +77,16 @@ const ProfileMain = () => {
         <TextBold18>{user?.full_name}</TextBold18>
       </View>
       <View style={styles.myOrdersContainer}>
-        <ShadowIconButton
-          icon={myOrdersIcon}
-          text={"My Orders"}
-          onPress={() => Navigation.navigate("myOrders")}
-        />
+        {!storeAdmin && (
+          <ShadowIconButton
+            icon={myOrdersIcon}
+            text={"My Orders"}
+            onPress={() => Navigation.navigate("myOrders")}
+          />
+        )}
+        {storeAdmin && (
+          <ShadowIconButton icon={myOrdersIcon} text={"Manage Stores"} />
+        )}
       </View>
       <View style={styles.otherActionsContainer}>
         <ShadowIconButton
@@ -87,11 +94,16 @@ const ProfileMain = () => {
           text={"My Profile"}
           onPress={() => Navigation.navigate("myProfile")}
         />
-        <ShadowIconButton
-          icon={faqIcon}
-          text={"Manage Posts"}
-          onPress={() => Navigation.navigate("managePost")}
-        />
+        {!storeAdmin && (
+          <ShadowIconButton
+            icon={faqIcon}
+            text={"Manage Posts"}
+            onPress={() => Navigation.navigate("managePost")}
+          />
+        )}
+        {storeAdmin && (
+          <ShadowIconButton icon={faqIcon} text={"Manage Orders"} />
+        )}
         <ShadowIconButton icon={bellIcon} text={"Notification"} />
       </View>
       <View style={styles.signOutContainer}>
