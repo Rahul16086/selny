@@ -39,7 +39,7 @@ const ManageStore = () => {
       if (data) {
         const fetchedData = [];
         data.forEach((item) => {
-          fetchedData.push(item.data());
+          fetchedData.push({ ...item.data(), id: item.id });
           if (fetchedData.length === data.size) {
             setData(fetchedData);
             setLoading(false);

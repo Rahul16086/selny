@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddStore from "../screens/AddStore";
 import ManagePost from "../screens/ManagePost";
+import ManageStoreItems from "../screens/ManageStoreItems";
 import ManageStores from "../screens/ManageStores";
 import MyOrders from "../screens/MyOrders";
 import MyOrdersDetailedView from "../screens/MyOrdersDetailedView";
@@ -45,6 +46,11 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="addStore"
         component={AddStore}
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
+        name="manageStoreItems"
+        component={ManageStoreItems}
         options={{ headerShown: false }}
       />
     </ProfileStack.Navigator>

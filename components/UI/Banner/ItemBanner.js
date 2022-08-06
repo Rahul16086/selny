@@ -1,11 +1,30 @@
 import { View, Text, Pressable, Image, StyleSheet } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TextBold18 from "../Text/TextBold18";
 import goArrow from "../../../assets/icons/GoArrow.png";
 import Text12 from "../Text/Text12";
 import Text20 from "../Text/Text20";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 const ItemBanner = ({ item }) => {
+  const [storeAdmin, setStoreAdmin] = useState(false);
+  const Navigation = useNavigation();
+
+  useEffect(() => {
+    let adminStatus = true;
+    const getStoreAdmin = async () => {
+      const status = await AsyncStorage.getItem("storeAdmin");
+      if (adminStatus) {
+        setStoreAdmin(status);
+      }
+    };
+    getStoreAdmin();
+    return () => {
+      adminStatus = false;
+    };
+  }, []);
+
   const styles = StyleSheet.create({
     container: {
       backgroundColor: "#fff",
@@ -46,8 +65,19 @@ const ItemBanner = ({ item }) => {
   });
 
   return (
-    <Pressable style={styles.container} android_ripple={{ color: "#6d6d6d" }}>
-      {item.imageLinks && (
+    <Pressable
+      style={styles.container}
+      android_ripple={{ color: "#6d6d6d" }}
+      onPress={
+        storeAdmin &&
+        (() =>
+          Navigation.navigate("manageStoreItems", {
+            id: item.id,
+            name: item.name,
+          }))
+      }
+    >
+      {item?.imageLinks && (
         <View style={styles.imageContainer}>
           <Image source={{ uri: item?.imageLinks[0] }} style={styles.image} />
         </View>

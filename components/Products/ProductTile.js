@@ -1,9 +1,12 @@
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Pressable, Image, View } from "react-native";
 import productImage from "../../assets/productImage1.png";
 import Text12 from "../UI/Text/Text12";
 import TextBold18 from "../UI/Text/TextBold18";
 
-const ProductTile = ({ item, navigation }) => {
+const ProductTile = ({ item }) => {
+  const navigation = useNavigation();
+
   return (
     <Pressable
       style={styles.container}
