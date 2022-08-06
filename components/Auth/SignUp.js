@@ -7,11 +7,7 @@ import { styles } from "./Login";
 import logo from "../../assets/Logo.png";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { auth } from "../../config/firebase";
-import {
-  createUserWithEmailAndPassword,
-  deleteUser,
-  sendEmailVerification,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 

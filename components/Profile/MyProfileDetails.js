@@ -8,6 +8,7 @@ import { db } from "../../config/firebase";
 import YellowButton from "../UI/Buttons/YellowButton";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 import Spinner from "react-native-loading-spinner-overlay";
+import { useNavigation } from "@react-navigation/native";
 
 const MyProfileDetails = () => {
   const [userDetails, setUserDetails] = useState({
@@ -25,6 +26,7 @@ const MyProfileDetails = () => {
   const [updated, setUpdated] = useState(false);
   const [modifyMode, setModifyMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const Navigation = useNavigation();
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -197,7 +199,13 @@ const MyProfileDetails = () => {
                   Update Details
                 </YellowButton>
               )}
-              {!modifyMode && <YellowButton>Change Password</YellowButton>}
+              {!modifyMode && (
+                <YellowButton
+                  onPress={() => Navigation.navigate("changePassword")}
+                >
+                  Change Password
+                </YellowButton>
+              )}
             </View>
           </View>
         </>

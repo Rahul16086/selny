@@ -7,6 +7,7 @@ import SignUpScreen from "../screens/SignUp";
 import SignUpSuccess from "../screens/SignUpSuccess";
 import SellerAdditionalInfo from "../screens/SellerAdditionalInfo";
 import ResetPassword from "../screens/ResetPassword";
+import ChangePassword from "../screens/ChangePassword";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +56,13 @@ const MainNavigation = () => {
         <Stack.Screen
           name="resetPassword"
           component={ResetPassword}
+          options={{ headerShown: false }}
+        />
+      )}
+      {isAuthenticated && (
+        <Stack.Screen
+          name="changePassword"
+          component={ChangePassword}
           options={{ headerShown: false }}
         />
       )}
