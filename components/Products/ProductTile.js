@@ -11,7 +11,12 @@ const ProductTile = ({ item }) => {
     <Pressable
       style={styles.container}
       android_ripple={{ color: "6d6d6d" }}
-      onPress={() => navigation.navigate("productDetails", { item: item })}
+      onPress={() =>
+        navigation.navigate("productDetails", {
+          item: item,
+          editMode: item?.editMode ? true : false,
+        })
+      }
     >
       <View style={styles.imageContainer}>
         <Image

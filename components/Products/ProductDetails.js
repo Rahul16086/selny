@@ -1,22 +1,27 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Alert } from "react-native";
 import OrangeButton from "../UI/Buttons/OrangeButton";
 import YellowButton from "../UI/Buttons/YellowButton";
 import Text20 from "../UI/Text/Text20";
 import Slideshow from "react-native-image-slider-show";
 import Spinner from "react-native-loading-spinner-overlay/lib";
+import { deleteDoc, doc } from "firebase/firestore";
+import { auth, db, storage } from "../../config/firebase";
+import { deleteObject, ref } from "firebase/storage";
 
 const ProductDetails = () => {
   const [currentItemData, setCurrentItemData] = useState({});
   const [imagesLinks, setImagesLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const Route = useRoute();
+  const { item, editMode } = Route.params;
+  const Navigation = useNavigation();
 
   useEffect(() => {
     setLoading(true);
-    setCurrentItemData(Route.params.item);
-    const images = Route.params.item.imageLinks; //transforming image links as object with url as key for slideshow component
+    setCurrentItemData(item);
+    const images = item.imageLinks; //transforming image links as object with url as key for slideshow component
     if (images.length !== imagesLinks.length) {
       images.forEach((url) => {
         setImagesLinks((prevImagesLinks) => [...prevImagesLinks, { url: url }]);
@@ -25,6 +30,42 @@ const ProductDetails = () => {
     }
     setLoading(false);
   }, []);
+
+  const deleteItemHandler = async () => {
+    setLoading(true);
+    Alert.alert(
+      "Confirm Delete Item?",
+      "Are you sure you want to delete item? This action cannot be undone.",
+      [
+        { text: "No", style: "cancel" },
+        {
+          text: "Yes",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deleteDoc(doc(db, "newItems", item?.id));
+              item.images.forEach(async (image) => {
+                const userId = auth.currentUser.uid;
+                const imageRef = ref(
+                  storage,
+                  "newItems/" + userId + "/" + image
+                );
+                await deleteObject(imageRef);
+                Navigation.navigate("manageStores");
+                setLoading(false);
+              });
+              setLoading(false);
+            } catch (error) {
+              setLoading(false);
+              console.log(error);
+              Alert.alert("Delete Failed", "Please try again later");
+            }
+          },
+        },
+      ]
+    );
+    setLoading(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -66,10 +107,20 @@ const ProductDetails = () => {
           </>
         )}
       </View>
-      <View style={styles.buttonContainer}>
-        <YellowButton width={"90%"}>Add to cart</YellowButton>
-        <OrangeButton width={"90%"}>Buy now</OrangeButton>
-      </View>
+      {!editMode && (
+        <View style={styles.buttonContainer}>
+          <YellowButton width={"90%"}>Add to cart</YellowButton>
+          <OrangeButton width={"90%"}>Buy now</OrangeButton>
+        </View>
+      )}
+      {editMode && (
+        <View style={styles.buttonContainer}>
+          <YellowButton width={"90%"}>Edit Item</YellowButton>
+          <OrangeButton width={"90%"} onPress={deleteItemHandler}>
+            Delete Item
+          </OrangeButton>
+        </View>
+      )}
     </View>
   );
 };

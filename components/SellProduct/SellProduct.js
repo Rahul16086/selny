@@ -1,4 +1,11 @@
-import { View, StyleSheet, Alert, Image, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  Image,
+  ScrollView,
+  StatusBar,
+} from "react-native";
 import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
@@ -285,6 +292,7 @@ const SellProduct = () => {
 export const sellProductStyles = StyleSheet.create({
   mainContainer: {
     padding: 10,
+    marginTop: StatusBar.currentHeight,
   },
   mapsPreview: {
     width: "100%",

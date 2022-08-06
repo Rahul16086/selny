@@ -20,6 +20,11 @@ const ManageStoreItem = () => {
       marginTop: StatusBar.currentHeight,
       marginBottom: 10,
     },
+    empty: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
   });
 
   useEffect(() => {
@@ -32,7 +37,7 @@ const ManageStoreItem = () => {
       const data = await getDocs(filterStoreQuery);
       const fetchedData = [];
       data.forEach((item) => {
-        fetchedData.push(item.data());
+        fetchedData.push({ ...item.data(), id: item.id });
         if (fetchedData.length === data.size) {
           setItemData(fetchedData);
           setLoading(false);
@@ -51,10 +56,17 @@ const ManageStoreItem = () => {
           <TextBold22>{name}</TextBold22>
         </View>
       )}
+      {!loading && itemData.length < 1 && (
+        <View style={styles.empty}>
+          <TextBold22>No items found</TextBold22>
+        </View>
+      )}
       {!loading && (
         <FlatList
           data={itemData}
-          renderItem={({ item }) => <ProductTile item={item} />}
+          renderItem={({ item }) => (
+            <ProductTile item={{ ...item, editMode: true }} />
+          )}
           contentContainerStyle={{
             paddingHorizontal: 10,
           }}

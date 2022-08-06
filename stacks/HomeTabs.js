@@ -58,6 +58,7 @@ function HomeTabs() {
         options={{
           title: "Sell An Item",
           headerStyle: { backgroundColor: "#FEB700" },
+          headerShown: false,
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <Image source={sellIcon} />,
         }}

@@ -1,4 +1,4 @@
-import { View, ScrollView, Alert, Image } from "react-native";
+import { View, ScrollView, Alert, Image, StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
 import { sellProductStyles } from "./SellProduct";
 import TextBold18 from "../UI/Text/TextBold18";
@@ -13,6 +13,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { LogBox } from "react-native";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
+import Spinner from "react-native-loading-spinner-overlay";
+import TextBold22 from "../UI/Text/TextBold22";
 
 const SellNewItem = () => {
   const [images, setImages] = useState([]);
@@ -29,14 +31,17 @@ const SellNewItem = () => {
   const [items, setItems] = useState([]);
   const isFocused = useIsFocused();
   const Navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   const inputChangeHandler = (input, value) => {
     setItemInfo({ ...itemInfo, [input]: value });
   };
 
   useEffect(() => {
+    setLoading(true);
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     const getStores = async () => {
+      setLoading(true);
       const userId = auth.currentUser.uid;
       const data = await getDocs(collection(db, "users/" + userId + "/stores"));
       if (data) {
@@ -47,6 +52,8 @@ const SellNewItem = () => {
             setItems(fetchedData);
           }
         });
+        console.log("Storeitems", items);
+        setLoading(false);
       }
     };
     getStores();
@@ -58,6 +65,7 @@ const SellNewItem = () => {
       itemInfo.quantity_left !== 0 ||
       images.length !== 0
     ) {
+      setLoading(true);
       setItemInfo({
         brand: "",
         item_name: "",
@@ -68,7 +76,9 @@ const SellNewItem = () => {
       });
       setValue(null);
       setImages([]);
+      setLoading(false);
     }
+    setLoading(false);
   }, [isFocused]);
 
   const pickImage = async () => {
@@ -122,6 +132,7 @@ const SellNewItem = () => {
   };
 
   const infoSubmitHandler = () => {
+    setLoading(true);
     const uploadedImages = [];
     const uploadedImageLinks = [];
     if (infoValidator()) {
@@ -132,16 +143,16 @@ const SellNewItem = () => {
           const finalImage = await fetch(image);
           const finalImageBytes = await finalImage.blob();
           const imageUploadState = await uploadBytes(imageRef, finalImageBytes);
-          console.log("Image Uploaded " + imageUploadState.metadata.name);
           uploadedImages.push(imageUploadState.metadata.name);
           const downloadableUrl = await getDownloadURL(imageUploadState.ref);
-          console.log("Downloadable Url: " + downloadableUrl);
           uploadedImageLinks.push(downloadableUrl);
         } catch (error) {
           console.log(error);
           Alert.alert("Image Upload Failed", "Something went wrong");
+          setLoading(false);
         }
         if (uploadedImageLinks.length === images.length) {
+          setLoading(true);
           try {
             const finalInfo = {
               ...itemInfo,
@@ -149,16 +160,17 @@ const SellNewItem = () => {
               images: uploadedImages,
               storeId: value,
             };
-            console.log("final: ", finalInfo);
             await setDoc(doc(db, "newItems/" + v4()), finalInfo);
             Navigation.navigate("home");
           } catch (error) {
             console.log(error);
             Alert.alert("Error", "DB Error occurred");
+            setLoading(false);
           }
         }
       });
     }
+    setLoading(false);
   };
 
   const clearImageHandler = () => {
@@ -180,71 +192,82 @@ const SellNewItem = () => {
 
   return (
     <View style={sellProductStyles.mainContainer}>
-      <ScrollView>
-        <TextBold18>Brand</TextBold18>
-        <TextInputGrey
-          onChangeText={inputChangeHandler.bind(this, "brand")}
-          value={itemInfo.brand}
-        />
-        <TextBold18>Item name</TextBold18>
-        <TextInputGrey
-          onChangeText={inputChangeHandler.bind(this, "item_name")}
-          value={itemInfo.item_name}
-        />
-        <TextBold18>Description</TextBold18>
-        <TextInputGrey
-          onChangeText={inputChangeHandler.bind(this, "description")}
-          value={itemInfo.description}
-        />
-        <TextBold18>Price</TextBold18>
-        <TextInputGrey
-          onChangeText={inputChangeHandler.bind(this, "price")}
-          value={itemInfo.price.toString()}
-        />
-        <TextBold18>Quantity Left</TextBold18>
-        <TextInputGrey
-          onChangeText={inputChangeHandler.bind(this, "quantity_left")}
-          value={itemInfo.quantity_left.toString()}
-        />
-        <TextBold18>Store</TextBold18>
-        <View>
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            style={{ backgroundColor: "transparent", borderColor: "#6D6D6D" }}
-            textStyle={{ fontFamily: "montserrat" }}
+      <Spinner visible={loading} />
+      {!loading && items.length < 1 && (
+        <TextBold22>Please add a store before selling a product</TextBold22>
+      )}
+      {!loading && items.length > 0 && (
+        <ScrollView>
+          <TextBold18>Brand</TextBold18>
+          <TextInputGrey
+            onChangeText={inputChangeHandler.bind(this, "brand")}
+            value={itemInfo.brand}
           />
-        </View>
-        <TextBold18>Images</TextBold18>
-        {images?.length > 0 && (
-          <>
-            <TextBold18>Selected Image(s)</TextBold18>
-            <View style={sellProductStyles.imagePreview}>
-              {images.map((image) => (
-                <Image
-                  source={{ uri: image }}
-                  style={sellProductStyles.selectedImage}
-                  key={image}
-                />
-              ))}
-            </View>
-          </>
-        )}
-        {images.length === 0 && (
-          <View style={{ alignItems: "center", height: 30 }}>
-            <TextBold18>No Images Added</TextBold18>
+          <TextBold18>Item name</TextBold18>
+          <TextInputGrey
+            onChangeText={inputChangeHandler.bind(this, "item_name")}
+            value={itemInfo.item_name}
+          />
+          <TextBold18>Description</TextBold18>
+          <TextInputGrey
+            onChangeText={inputChangeHandler.bind(this, "description")}
+            value={itemInfo.description}
+          />
+          <TextBold18>Price</TextBold18>
+          <TextInputGrey
+            onChangeText={inputChangeHandler.bind(this, "price")}
+            value={itemInfo.price.toString()}
+          />
+          <TextBold18>Quantity Left</TextBold18>
+          <TextInputGrey
+            onChangeText={inputChangeHandler.bind(this, "quantity_left")}
+            value={itemInfo.quantity_left.toString()}
+          />
+          <TextBold18>Store</TextBold18>
+          <View>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              style={{
+                backgroundColor: "transparent",
+                borderColor: "#6D6D6D",
+              }}
+              textStyle={{ fontFamily: "montserrat" }}
+            />
           </View>
-        )}
-        <YellowButton onPress={pickImage}>Add Images</YellowButton>
-        {images.length > 0 && (
-          <YellowButton onPress={clearImageHandler}>Clear Images</YellowButton>
-        )}
-        <YellowButton onPress={infoSubmitHandler}>Submit</YellowButton>
-      </ScrollView>
+          <TextBold18>Images</TextBold18>
+          {images?.length > 0 && (
+            <>
+              <TextBold18>Selected Image(s)</TextBold18>
+              <View style={sellProductStyles.imagePreview}>
+                {images.map((image) => (
+                  <Image
+                    source={{ uri: image }}
+                    style={sellProductStyles.selectedImage}
+                    key={image}
+                  />
+                ))}
+              </View>
+            </>
+          )}
+          {images.length === 0 && (
+            <View style={{ alignItems: "center", height: 30 }}>
+              <TextBold18>No Images Added</TextBold18>
+            </View>
+          )}
+          <YellowButton onPress={pickImage}>Add Images</YellowButton>
+          {images.length > 0 && (
+            <YellowButton onPress={clearImageHandler}>
+              Clear Images
+            </YellowButton>
+          )}
+          <YellowButton onPress={infoSubmitHandler}>Submit</YellowButton>
+        </ScrollView>
+      )}
     </View>
   );
 };

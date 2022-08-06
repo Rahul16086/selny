@@ -8,12 +8,14 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import TextBold18 from "../UI/Text/TextBold18";
 import { useIsFocused } from "@react-navigation/native";
+import Spinner from "react-native-loading-spinner-overlay/lib";
 
 const Products = ({ navigation }) => {
   const [newItemsToggle, setNewItemsToggle] = useState(true);
   const isFocused = useIsFocused();
   const [newItems, setNewItems] = useState([]);
   const [usedItemsData, setUsedItemsData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const toggleUsedItems = () => {
     setNewItemsToggle(false);
@@ -25,17 +27,22 @@ const Products = ({ navigation }) => {
 
   useEffect(() => {
     //initialize used items data from firestore
+    setLoading(true);
     const getNewItems = async () => {
+      setLoading(true);
       const docs = await getDocs(collection(db, "newItems"));
       const newItems = [];
       docs.forEach((item) => {
         newItems.push(item.data());
         if (newItems.length === docs.size) {
           setNewItems(newItems);
+          setLoading(false);
         }
       });
+      setLoading(false);
     };
     const getUsedItems = async () => {
+      setLoading(true);
       const docs = await getDocs(collection(db, "itemsToSell"));
       if (docs.size !== usedItemsData.length) {
         const itemData = [];
@@ -43,9 +50,11 @@ const Products = ({ navigation }) => {
           itemData.push(doc.data());
           if (itemData.length === docs.size) {
             setUsedItemsData(itemData);
+            setLoading(false);
           }
         });
       }
+      setLoading(false);
     };
     getNewItems();
     getUsedItems();
@@ -77,7 +86,8 @@ const Products = ({ navigation }) => {
           Used
         </YellowButtonSmall>
       </View>
-      {newItemsToggle && (
+      <Spinner visible={loading} />
+      {newItemsToggle && !loading && (
         <View style={{ flex: 1 }}>
           {newItems.length > 0 ? (
             <ProductList productInfo={newItems} navigation={navigation} />
@@ -94,7 +104,7 @@ const Products = ({ navigation }) => {
           )}
         </View>
       )}
-      {!newItemsToggle && (
+      {!newItemsToggle && !loading && (
         <View style={{ flex: 1 }}>
           {usedItemsData.length > 0 ? (
             <ProductList productInfo={usedItemsData} navigation={navigation} />
