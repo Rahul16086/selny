@@ -115,7 +115,19 @@ const ProductDetails = () => {
       )}
       {editMode && (
         <View style={styles.buttonContainer}>
-          <YellowButton width={"90%"}>Edit Item</YellowButton>
+          <YellowButton
+            width={"90%"}
+            onPress={() =>
+              Navigation.navigate("sellStack", {
+                screen: "updateItem",
+                params: {
+                  item: item,
+                },
+              })
+            }
+          >
+            Edit Item
+          </YellowButton>
           <OrangeButton width={"90%"} onPress={deleteItemHandler}>
             Delete Item
           </OrangeButton>

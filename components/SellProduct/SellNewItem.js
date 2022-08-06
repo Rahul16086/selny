@@ -52,7 +52,6 @@ const SellNewItem = () => {
             setItems(fetchedData);
           }
         });
-        console.log("Storeitems", items);
         setLoading(false);
       }
     };
