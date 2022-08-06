@@ -96,7 +96,9 @@ const Login = () => {
           onChangeText={inputChangedHandler.bind(this, "password")}
         />
         <YellowButton onPress={submitHandler}>Login</YellowButton>
-        <TransparentButton>Forgot Password?</TransparentButton>
+        <TransparentButton onPress={() => navigation.navigate("resetPassword")}>
+          Forgot Password?
+        </TransparentButton>
       </View>
 
       <View style={styles.otherSignInOptions}>

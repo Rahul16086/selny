@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import TextBold22 from "../UI/Text/TextBold22";
 import Text20 from "../UI/Text/Text20";
@@ -197,6 +197,7 @@ const MyProfileDetails = () => {
                   Update Details
                 </YellowButton>
               )}
+              {!modifyMode && <YellowButton>Change Password</YellowButton>}
             </View>
           </View>
         </>
