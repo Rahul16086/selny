@@ -27,6 +27,7 @@ const ProfileMain = () => {
     await signOut(auth);
     dispatch(setAuthLogout({ isAuthenticated: false, token: "" }));
     AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("storeAdmin");
   };
 
   const [user, setUser] = useState(null);
