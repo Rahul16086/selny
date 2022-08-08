@@ -23,7 +23,7 @@ const UpdateItem = () => {
     try {
       setLoading(true);
       await updateDoc(doc(db, "newItems", itemInfo.id), { ...itemInfo });
-      Navigation.navigate("manageStores");
+      Navigation.navigate("home");
       setLoading(false);
     } catch (error) {
       setLoading(false);

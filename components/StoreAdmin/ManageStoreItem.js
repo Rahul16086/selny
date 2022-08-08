@@ -1,7 +1,7 @@
 import { View, StyleSheet, FlatList, StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
 import TextBold22 from "../UI/Text/TextBold22";
-import { useRoute } from "@react-navigation/native";
+import { useIsFocused, useRoute } from "@react-navigation/native";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import ProductTile from "../Products/ProductTile";
@@ -12,6 +12,7 @@ const ManageStoreItem = () => {
   const { id, name } = Route.params;
   const [itemData, setItemData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isFocused = useIsFocused();
 
   const styles = StyleSheet.create({
     container: {
@@ -46,7 +47,7 @@ const ManageStoreItem = () => {
       setLoading(false);
     };
     getStoreData();
-  }, []);
+  }, [isFocused]);
 
   return (
     <>

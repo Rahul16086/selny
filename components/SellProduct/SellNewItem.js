@@ -1,4 +1,4 @@
-import { View, ScrollView, Alert, Image, StatusBar } from "react-native";
+import { View, ScrollView, Alert, Image, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { sellProductStyles } from "./SellProduct";
 import TextBold18 from "../UI/Text/TextBold18";
@@ -189,11 +189,31 @@ const SellNewItem = () => {
     );
   };
 
+  const style = StyleSheet.create({
+    addStoreButtonContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 50,
+    },
+  });
+
   return (
     <View style={sellProductStyles.mainContainer}>
       <Spinner visible={loading} />
       {!loading && items.length < 1 && (
-        <TextBold22>Please add a store before selling a product</TextBold22>
+        <>
+          <TextBold22>Please add a store before selling a product</TextBold22>
+          <View style={style.addStoreButtonContainer}>
+            <YellowButton
+              width={"75%"}
+              onPress={() =>
+                Navigation.navigate("profileStack", { screen: "addStore" })
+              }
+            >
+              Add Store
+            </YellowButton>
+          </View>
+        </>
       )}
       {!loading && items.length > 0 && (
         <ScrollView>
