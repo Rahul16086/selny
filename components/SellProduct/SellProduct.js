@@ -24,8 +24,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { db, storage } from "../../config/firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth, db, storage } from "../../config/firebase";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
@@ -88,7 +87,7 @@ const SellProduct = () => {
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
 
-  async function verifyPermissions() {
+  const verifyPermissions = async () => {
     if (
       locationPermissionInformation.status === PermissionStatus.UNDETERMINED
     ) {
@@ -100,16 +99,14 @@ const SellProduct = () => {
       return false;
     }
     return true;
-  }
+  };
 
   const getLocationHandler = async () => {
     const hasPermission = await verifyPermissions();
-    console.log(hasPermission);
     if (!hasPermission) {
       return;
     }
     const location = await getCurrentPositionAsync();
-    console.log(location);
     setPickedLocation({
       lat: location.coords.latitude,
       lng: location.coords.longitude,
@@ -124,26 +121,22 @@ const SellProduct = () => {
     }
     image.forEach(async (singleImage) => {
       try {
-        const currentUserId = await AsyncStorage.getItem("token");
+        const currentUserId = auth.currentUser.uid;
         const imageRef = ref(storage, "sell/" + currentUserId + "/" + v4());
         //convert image to bytes as it is in string format
         const finalImage = await fetch(singleImage);
         const finalImageBytes = await finalImage.blob();
         const imageUploadState = await uploadBytes(imageRef, finalImageBytes);
-        console.log("Image Uploaded " + imageUploadState.metadata.name);
         images.push(imageUploadState.metadata.name);
         const downloadableUrl = await getDownloadURL(imageUploadState.ref);
-        console.log("Downloadable Url: " + downloadableUrl);
         uploadedImageLinks.push(downloadableUrl);
       } catch (error) {
         console.log(error);
         Alert.alert("Image Upload Failed", "Please try again");
       }
-      // console.log("uploaded info: ", uploadedImageLinks);
       if (uploadedImageLinks.length === image.length) {
-        console.log("Image Upload Done");
         try {
-          const currentUserId = await AsyncStorage.getItem("token");
+          const currentUserId = auth.currentUser.uid;
           const finalInfo = {
             ...itemInfo,
             location: pickedLocation,
@@ -207,7 +200,6 @@ const SellProduct = () => {
   };
 
   const submitHandler = async () => {
-    console.log("Submitting");
     if (verifyEnteredInfoAndUploadedImages()) {
       uploadImageAndFinalItemInfo();
     }
