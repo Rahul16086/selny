@@ -20,6 +20,12 @@ const ForgotPassword = () => {
       alignItems: "center",
       paddingHorizontal: 20,
     },
+    titleContainer: {
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 20,
+    },
   });
 
   const resetPasswordHandler = async () => {
@@ -43,6 +49,9 @@ const ForgotPassword = () => {
   return (
     <View style={style.container}>
       <View style={styles.formContainer}>
+        <View style={style.titleContainer}>
+          <TextBold18>Forgot Password</TextBold18>
+        </View>
         <TextBold18>Enter E-Mail</TextBold18>
         <TextInputGrey onChangeText={setEmail} />
         <YellowButton onPress={resetPasswordHandler}>Submit</YellowButton>

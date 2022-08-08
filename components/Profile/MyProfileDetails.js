@@ -4,7 +4,7 @@ import TextBold22 from "../UI/Text/TextBold22";
 import Text20 from "../UI/Text/Text20";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../config/firebase";
+import { auth, db } from "../../config/firebase";
 import YellowButton from "../UI/Buttons/YellowButton";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -85,7 +85,7 @@ const MyProfileDetails = () => {
       ) {
         Alert.alert("Invalid Details", "Please check the details entered");
       } else {
-        const userId = await AsyncStorage.getItem("token");
+        const userId = auth.currentUser.uid;
         const currentUserRef = doc(db, "users", userId);
         await updateDoc(currentUserRef, {
           full_name: modifyInputValues.full_name,
@@ -94,7 +94,12 @@ const MyProfileDetails = () => {
         setUpdated((prev) => !prev);
         setModifyMode(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        "Something went wrong while updating the details. Please try again"
+      );
+    }
   };
 
   const styles = StyleSheet.create({
@@ -173,13 +178,13 @@ const MyProfileDetails = () => {
             {userDetails?.address.length > 1 && !modifyMode && (
               <Text20>{userDetails?.address}</Text20>
             )}
-            {modifyMode && (
+            {modifyMode && userDetails?.address.length > 1 && (
               <TextInputGrey
                 value={modifyInputValues.address}
                 onChangeText={modifyChangedHandler.bind(this, "address")}
               />
             )}
-            {userDetails?.address.length < 1 ? (
+            {userDetails?.address.length < 1 && !modifyMode ? (
               <>
                 <TextInputGrey
                   onChangeText={(text) => setAddressInputValues(text)}

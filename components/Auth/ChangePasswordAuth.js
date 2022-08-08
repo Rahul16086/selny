@@ -29,6 +29,12 @@ const ChangePasswordAuth = () => {
       alignItems: "center",
       paddingHorizontal: 20,
     },
+    titleContainer: {
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 20,
+    },
   });
 
   const changePasswordHandler = async () => {
@@ -59,6 +65,9 @@ const ChangePasswordAuth = () => {
   return (
     <View style={style.container}>
       <View style={styles.formContainer}>
+        <View style={style.titleContainer}>
+          <TextBold18>Change Password</TextBold18>
+        </View>
         <TextBold18>New Password</TextBold18>
         <TextInputGrey
           secureTextEntry={true}
