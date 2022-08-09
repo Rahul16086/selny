@@ -6,6 +6,7 @@ const TextInputGrey = ({
   onChangeText,
   value,
   style,
+  keyboardType,
 }) => {
   return (
     <TextInput
@@ -13,6 +14,7 @@ const TextInputGrey = ({
       secureTextEntry={secureTextEntry}
       onChangeText={onChangeText}
       value={value}
+      keyboardType={keyboardType}
     >
       {children}
     </TextInput>

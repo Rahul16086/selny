@@ -86,7 +86,7 @@ const ProductDetails = () => {
       )}
       <View style={styles.productInfo}>
         {currentItemData.brand && (
-          <Text style={styles.productBrand}>Apple</Text>
+          <Text style={styles.productBrand}>{currentItemData.brand}</Text>
         )}
         <Text style={styles.productName}>{currentItemData.item_name}</Text>
         <Text20>{currentItemData.description}</Text20>
@@ -114,7 +114,23 @@ const ProductDetails = () => {
       {!editMode && (
         <View style={styles.buttonContainer}>
           <YellowButton width={"90%"}>Add to cart</YellowButton>
-          <OrangeButton width={"90%"}>Buy now</OrangeButton>
+          <OrangeButton
+            width={"90%"}
+            onPress={() =>
+              Navigation.navigate("placeOrder", {
+                itemName: `${
+                  currentItemData.brand
+                    ? currentItemData.brand + " " + currentItemData.item_name
+                    : currentItemData.item_name
+                }`,
+                itemQuantity: currentItemData.quantity_left || 1,
+                itemPrice: currentItemData?.price,
+                itemId: currentItemData.id,
+              })
+            }
+          >
+            Buy now
+          </OrangeButton>
         </View>
       )}
       {editMode && (
