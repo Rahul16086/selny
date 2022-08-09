@@ -12,6 +12,7 @@ import { auth, db } from "../../config/firebase";
 import OrdersBanner from "../UI/Banner/OrdersBanner";
 import { useIsFocused } from "@react-navigation/native";
 import Spinner from "react-native-loading-spinner-overlay";
+import TextBold18 from "../UI/Text/TextBold18";
 
 const ManageOrders = () => {
   const styles = StyleSheet.create({
@@ -19,6 +20,10 @@ const ManageOrders = () => {
       marginTop: StatusBar.currentHeight,
       justifyContent: "center",
       alignItems: "center",
+    },
+    titleContainer: {
+      alignItems: "center",
+      marginBottom: 20,
     },
   });
 
@@ -90,6 +95,10 @@ const ManageOrders = () => {
   return (
     <View style={styles.mainConatainer}>
       <Spinner visible={loading} />
+      <View style={styles.titleContainer}>
+        <TextBold18>Manage Orders</TextBold18>
+      </View>
+
       {ordersData.length > 0 && !loading && (
         <FlatList
           data={ordersData}
