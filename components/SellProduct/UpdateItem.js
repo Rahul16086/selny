@@ -11,7 +11,7 @@ import { db } from "../../config/firebase";
 const UpdateItem = () => {
   const Route = useRoute();
   const Navigation = useNavigation();
-  const { item } = Route.params;
+  const { item, usedItem } = Route.params;
   const [itemInfo, setItemInfo] = useState(item);
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +22,10 @@ const UpdateItem = () => {
   const updateHandler = async () => {
     try {
       setLoading(true);
-      await updateDoc(doc(db, "newItems", itemInfo.id), { ...itemInfo });
+      await updateDoc(
+        doc(db, `${usedItem ? "itemsToSell" : "newItems"}`, itemInfo.id),
+        { ...itemInfo }
+      );
       Navigation.navigate("home");
       setLoading(false);
     } catch (error) {
@@ -46,11 +49,15 @@ const UpdateItem = () => {
       <Spinner visible={loading} />
       {!loading && (
         <ScrollView>
-          <TextBold18>Brand</TextBold18>
-          <TextInputGrey
-            onChangeText={inputChangeHandler.bind(this, "brand")}
-            value={itemInfo.brand}
-          />
+          {itemInfo?.brand && (
+            <>
+              <TextBold18>Brand</TextBold18>
+              <TextInputGrey
+                onChangeText={inputChangeHandler.bind(this, "brand")}
+                value={itemInfo.brand}
+              />
+            </>
+          )}
           <TextBold18>Item name</TextBold18>
           <TextInputGrey
             onChangeText={inputChangeHandler.bind(this, "item_name")}
@@ -66,11 +73,15 @@ const UpdateItem = () => {
             onChangeText={inputChangeHandler.bind(this, "price")}
             value={itemInfo.price.toString()}
           />
-          <TextBold18>Quantity Left</TextBold18>
-          <TextInputGrey
-            onChangeText={inputChangeHandler.bind(this, "quantity_left")}
-            value={itemInfo.quantity_left.toString()}
-          />
+          {itemInfo?.quantity_left && (
+            <>
+              <TextBold18>Quantity Left</TextBold18>
+              <TextInputGrey
+                onChangeText={inputChangeHandler.bind(this, "quantity_left")}
+                value={itemInfo?.quantity_left.toString()}
+              />
+            </>
+          )}
           <YellowButton onPress={() => Navigation.navigate("manageStores")}>
             Cancel
           </YellowButton>

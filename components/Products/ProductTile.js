@@ -14,7 +14,7 @@ const ProductTile = ({ item }) => {
       onPress={() =>
         navigation.navigate("productDetails", {
           item: item,
-          editMode: item?.editMode ? true : false,
+          editMode: item.editMode ? true : false,
         })
       }
     >

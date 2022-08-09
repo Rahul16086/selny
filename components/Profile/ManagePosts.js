@@ -24,7 +24,7 @@ const ManagePosts = () => {
       const data = await getDocs(filterCurrentUser);
       const itemData = [];
       data.forEach((item) => {
-        itemData.push(item.data());
+        itemData.push({ ...item.data(), id: item.id });
         if (itemData.length === data.size) {
           setLoading(false);
           setUsedItems(itemData);
@@ -50,15 +50,26 @@ const ManagePosts = () => {
         </View>
       )}
       {usedItems.length > 0 && !loading && (
-        <FlatList
-          data={usedItems}
-          renderItem={({ item }) => <ItemBanner item={item} />}
-          key={v4()}
-          contentContainerStyle={{
-            marginTop: StatusBar.currentHeight,
-            alignItems: "center",
-          }}
-        />
+        <>
+          <View
+            style={{
+              marginTop: StatusBar.currentHeight,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TextBold18>Manage Posts</TextBold18>
+          </View>
+          <FlatList
+            data={usedItems}
+            renderItem={({ item }) => <ItemBanner item={item} />}
+            key={v4()}
+            contentContainerStyle={{
+              marginTop: StatusBar.currentHeight,
+              alignItems: "center",
+            }}
+          />
+        </>
       )}
     </>
   );

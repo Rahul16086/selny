@@ -69,12 +69,18 @@ const ItemBanner = ({ item }) => {
       style={styles.container}
       android_ripple={{ color: "#6d6d6d" }}
       onPress={
-        storeAdmin &&
-        (() =>
-          Navigation.navigate("manageStoreItems", {
-            id: item.id,
-            name: item.name,
-          }))
+        storeAdmin
+          ? () =>
+              Navigation.navigate("manageStoreItems", {
+                id: item.id,
+                name: item.name,
+              })
+          : () =>
+              Navigation.navigate("productDetails", {
+                item: item,
+                editMode: true,
+                usedItem: true,
+              })
       }
     >
       {item?.imageLinks && (

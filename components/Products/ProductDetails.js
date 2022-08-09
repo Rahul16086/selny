@@ -15,7 +15,7 @@ const ProductDetails = () => {
   const [imagesLinks, setImagesLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const Route = useRoute();
-  const { item, editMode } = Route.params;
+  const { item, editMode = false, usedItem = false } = Route.params;
   const Navigation = useNavigation();
 
   useEffect(() => {
@@ -43,15 +43,19 @@ const ProductDetails = () => {
           style: "destructive",
           onPress: async () => {
             try {
-              await deleteDoc(doc(db, "newItems", item?.id));
+              await deleteDoc(
+                doc(db, `${usedItem ? "itemsToSell" : "newItems"}`, item?.id)
+              );
               item.images.forEach(async (image) => {
                 const userId = auth.currentUser.uid;
                 const imageRef = ref(
                   storage,
-                  "newItems/" + userId + "/" + image
+                  `${usedItem ? "sell" : "newItems"}/` + userId + "/" + image
                 );
                 await deleteObject(imageRef);
-                Navigation.navigate("manageStores");
+                Navigation.navigate(
+                  `${usedItem ? "managePost" : "manageStores"}`
+                );
                 setLoading(false);
               });
               setLoading(false);
@@ -122,6 +126,7 @@ const ProductDetails = () => {
                 screen: "updateItem",
                 params: {
                   item: item,
+                  usedItem: usedItem,
                 },
               })
             }

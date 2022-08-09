@@ -33,7 +33,7 @@ const Products = ({ navigation }) => {
       const docs = await getDocs(collection(db, "newItems"));
       const newItems = [];
       docs.forEach((item) => {
-        newItems.push(item.data());
+        newItems.push({ ...item.data(), editMode: false });
         if (newItems.length === docs.size) {
           setNewItems(newItems);
           setLoading(false);
