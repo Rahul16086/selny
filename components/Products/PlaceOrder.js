@@ -9,7 +9,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
@@ -21,7 +21,7 @@ import OrangeButton from "../UI/Buttons/OrangeButton";
 const PlaceOrder = () => {
   const Route = useRoute();
   const Navigation = useNavigation();
-  const { itemId, itemName, itemQuantity, itemPrice } = Route.params;
+  const { itemId, itemName, itemQuantity, itemPrice, storeId } = Route.params;
 
   const [userDetails, setUserDetails] = useState({});
   const [open, setOpen] = useState(false);
@@ -91,11 +91,30 @@ const PlaceOrder = () => {
       Alert.alert("Error", "Please select an address");
       return false;
     }
+    return true;
   };
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     if (validateInput()) {
       console.log("Submit");
+      const finalInfo = {
+        itemId: itemId,
+        userId: auth.currentUser.uid,
+        address: userDetails.address ? userDetails.address : value,
+        quantity: quantity,
+        storeId: storeId ? storeId : null,
+        orderStatus: "Preparing to ship",
+      };
+      console.log("finalInfo", finalInfo);
+      try {
+        await setDoc(doc(db, "ordersNewItems/", v4()), finalInfo);
+        await updateDoc(doc(db, "newItems/" + itemId), {
+          quantity_left: itemQuantity - quantity,
+        });
+        Navigation.navigate("myOrders");
+      } catch (error) {
+        Alert.alert("Error", "Something went wrong while placing order");
+      }
     }
   };
 

@@ -126,6 +126,9 @@ const ProductDetails = () => {
                 itemQuantity: currentItemData.quantity_left || 1,
                 itemPrice: currentItemData?.price,
                 itemId: currentItemData.id,
+                storeId: currentItemData.storeId
+                  ? currentItemData.storeId
+                  : null,
               })
             }
           >

@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import GrayText18 from "../Text/GrayText18";
+import TextBold22 from "../Text/TextBold22";
 
-const OrderDetailedBanner = ({ productInfo }) => {
+const OrderDetailedBanner = ({ itemInfo, orderInfo }) => {
   const styles = StyleSheet.create({
     container: {
       alignItems: "center",
@@ -12,8 +13,9 @@ const OrderDetailedBanner = ({ productInfo }) => {
       borderRadius: 5,
       elevation: 8,
       paddingHorizontal: 20,
+      paddingVertical: 10,
       alignItems: "flex-start",
-      justifyContent: "center",
+      justifyContent: "space-between",
     },
     productName: {
       fontSize: 28,
@@ -36,17 +38,31 @@ const OrderDetailedBanner = ({ productInfo }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.productName}>{productInfo.name}</Text>
+      <Text style={styles.productName}>
+        {itemInfo.brand
+          ? itemInfo.brand + " " + itemInfo.item_name
+          : itemInfo.item_name}
+      </Text>
+      <GrayText18>Quantity - {orderInfo.quantity}</GrayText18>
       <View style={styles.priceContainer}>
         <Text style={styles.priceSymbol}>£</Text>
-        <Text style={styles.productPrice}>{productInfo.price}</Text>
+        <Text style={styles.productPrice}>
+          {itemInfo.price * orderInfo.quantity}
+        </Text>
       </View>
-      <GrayText18>Delivered On {productInfo.deliveryDate}</GrayText18>
-      <GrayText18>Ordered On {productInfo.orderDate}</GrayText18>
-      <GrayText18>Paid via {productInfo.paymentInfo}</GrayText18>
-      <GrayText18>
-        Replacement till {productInfo.replacementTillDate}
-      </GrayText18>
+
+      {orderInfo.orderStatus !== "Delivered" ? (
+        <GrayText18>Order Status - {orderInfo.orderStatus}</GrayText18>
+      ) : (
+        <GrayText18>Delivered on - {orderInfo.orderStatus}</GrayText18>
+      )}
+      <GrayText18>Address - {orderInfo.address}</GrayText18>
+      <GrayText18>Paid via Credit Card ending 9867</GrayText18>
+      {orderInfo.orderStatus === "Delivered" && (
+        <GrayText18>
+          Replacement till {orderInfo.replacementTillDate}
+        </GrayText18>
+      )}
     </View>
   );
 };

@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, StatusBar, Image } from "react-native";
+import { View, StyleSheet, StatusBar, Image } from "react-native";
 import React from "react";
 import productImageHires from "../../assets/productImageHiRes.png";
 import OrderDetailedBanner from "../UI/Banner/OrderDetailedBanner";
 import YellowButton from "../UI/Buttons/YellowButton";
 import OrangeButton from "../UI/Buttons/OrangeButton";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const productInfo = {
   name: "Apple iPhone 13 Pro (128GB)",
@@ -13,7 +14,13 @@ const productInfo = {
   paymentInfo: "Visa Credit Card 13xx",
   replacementTillDate: "09 July 2022",
 };
+
 const MyOrdersDetailedViewComponents = () => {
+  const Route = useRoute();
+  const Navigation = useNavigation();
+  const { orderInfo, itemInfo } = Route.params;
+  console.log("orderInfo", orderInfo, "itemInfo", itemInfo);
+
   const styles = StyleSheet.create({
     container: {
       marginTop: StatusBar.currentHeight,
@@ -46,10 +53,12 @@ const MyOrdersDetailedViewComponents = () => {
         <Image source={productImageHires} style={styles.image} />
       </View>
       <View style={styles.bannerContainer}>
-        <OrderDetailedBanner productInfo={productInfo} />
+        <OrderDetailedBanner itemInfo={itemInfo} orderInfo={orderInfo} />
       </View>
       <View style={styles.actionsContainer}>
-        <YellowButton>Buy it again</YellowButton>
+        <YellowButton onPress={() => Navigation.navigate("home")}>
+          Buy it again
+        </YellowButton>
         <OrangeButton>Request Return / Replacement</OrangeButton>
       </View>
     </View>
