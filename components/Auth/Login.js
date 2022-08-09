@@ -61,6 +61,8 @@ const Login = () => {
           if (userDbData.exists()) {
             if (userDbData.data().storeAdmin) {
               AsyncStorage.setItem("storeAdmin", "true");
+            } else {
+              AsyncStorage.setItem("storeAdmin", "false");
             }
           }
           dispatch(

@@ -114,7 +114,11 @@ const ProfileMain = () => {
               />
             )}
             {storeAdmin && (
-              <ShadowIconButton icon={faqIcon} text={"Manage Orders"} />
+              <ShadowIconButton
+                icon={faqIcon}
+                text={"Manage Orders"}
+                onPress={() => Navigation.navigate("manageOrders")}
+              />
             )}
             <ShadowIconButton icon={bellIcon} text={"Notification"} />
           </View>

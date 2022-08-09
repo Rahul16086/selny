@@ -25,7 +25,6 @@ const MyOrdersComponent = () => {
       data.forEach((item) => {
         fetchedData.push({ ...item.data(), id: item.id });
         if (fetchedData.length === data.size) {
-          console.log(fetchedData);
           setOrdersData(fetchedData);
         }
       });
@@ -47,22 +46,3 @@ const MyOrdersComponent = () => {
 };
 
 export default MyOrdersComponent;
-
-{
-  /*<ScrollView
-      style={styles.container}
-      contentContainerStyle={{
-        justifyContent: "flex-end",
-        alignItems: "center",
-      }}
-    >
-      <OrdersBanner />
-      <OrdersBanner />
-      <OrdersBanner />
-      <OrdersBanner />
-      <OrdersBanner />
-      <OrdersBanner />
-      <OrdersBanner />
-      <OrdersBanner />
-    </ScrollView>*/
-}

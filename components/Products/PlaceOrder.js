@@ -94,10 +94,11 @@ const PlaceOrder = () => {
     }
     return true;
   };
+
   let orderId = "";
+
   const submitHandler = async () => {
     if (validateInput()) {
-      console.log("Submit");
       const finalInfo = {
         itemId: itemId,
         userId: auth.currentUser.uid,

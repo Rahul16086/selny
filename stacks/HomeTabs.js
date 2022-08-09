@@ -19,7 +19,6 @@ function HomeTabs() {
         tabBarStyle: {
           backgroundColor: "#FEB700",
         },
-        tabBarHideOnKeyboard: true,
       }}
     >
       <Tab.Screen

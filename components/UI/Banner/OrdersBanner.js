@@ -5,10 +5,12 @@ import TextBold18 from "../Text/TextBold18";
 import { useNavigation } from "@react-navigation/native";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OrdersBanner = ({ data }) => {
   const Navigation = useNavigation();
   const [currentData, setCurrentData] = useState(null);
+  const [storeAdmin, setStoreAdmin] = useState(false);
 
   const styles = StyleSheet.create({
     container: {
@@ -50,11 +52,14 @@ const OrdersBanner = ({ data }) => {
 
   useEffect(() => {
     const getItemDetails = async () => {
+      const storeAdmin = await AsyncStorage.getItem("storeAdmin");
+      setStoreAdmin(storeAdmin);
       try {
         const itemData = await getDoc(doc(db, "newItems/" + data.itemId));
         setCurrentData({ ...itemData.data(), id: itemData.id });
-        console.log("current data", itemData.data());
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
     getItemDetails();
   }, []);
@@ -69,12 +74,13 @@ const OrdersBanner = ({ data }) => {
             Navigation.navigate("myOrdersDetailedView", {
               itemInfo: currentData,
               orderInfo: data,
+              storeAdmin: storeAdmin,
             })
           }
         >
           <View style={styles.imageContainer}>
             <Image
-              source={{ uri: currentData.imageLinks[0] }}
+              source={{ uri: currentData?.imageLinks[0] }}
               style={styles.image}
             />
           </View>
