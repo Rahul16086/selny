@@ -17,6 +17,7 @@ import Text20 from "../UI/Text/Text20";
 import TextBold22 from "../UI/Text/TextBold22";
 import YellowButton from "../UI/Buttons/YellowButton";
 import OrangeButton from "../UI/Buttons/OrangeButton";
+import * as Notification from "expo-notifications";
 
 const PlaceOrder = () => {
   const Route = useRoute();
@@ -93,7 +94,7 @@ const PlaceOrder = () => {
     }
     return true;
   };
-
+  let orderId = "";
   const submitHandler = async () => {
     if (validateInput()) {
       console.log("Submit");
@@ -105,17 +106,31 @@ const PlaceOrder = () => {
         storeId: storeId ? storeId : null,
         orderStatus: "Preparing to ship",
       };
-      console.log("finalInfo", finalInfo);
       try {
-        await setDoc(doc(db, "ordersNewItems/", v4()), finalInfo);
+        orderId = v4();
+        await setDoc(doc(db, "ordersNewItems/", orderId), finalInfo);
         await updateDoc(doc(db, "newItems/" + itemId), {
           quantity_left: itemQuantity - quantity,
         });
-        Navigation.navigate("myOrders");
+        notifyOrderSuccess();
+        Navigation.navigate("profileStack", { screen: "myOrders" });
       } catch (error) {
         Alert.alert("Error", "Something went wrong while placing order");
       }
     }
+  };
+
+  const notifyOrderSuccess = () => {
+    Notification.scheduleNotificationAsync({
+      content: {
+        title: "Order Placed",
+        body: `${itemName} has been ordered successfully`,
+        data: { orderId: orderId },
+      },
+      trigger: {
+        seconds: 3,
+      },
+    });
   };
 
   return (

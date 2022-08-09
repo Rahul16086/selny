@@ -8,6 +8,17 @@ import store from "./store/redux/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setAuthLogin } from "./store/redux/userSlice";
 import MainNavigation from "./stacks/MainNavigation";
+import * as Notification from "expo-notifications";
+
+Notification.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldPlaySound: true,
+      shouldShowAlert: true,
+      shouldSetBadge: false,
+    };
+  },
+});
 
 const Root = () => {
   const [appIsReady, setAppIsReady] = useState(false);
