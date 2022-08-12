@@ -12,10 +12,12 @@ const userSlice = createSlice({
     setAuthLogin: (state, action) => {
       state.isAuthenticated = true;
       state.token = action.payload.token;
+      state.storeAdmin = action.payload.storeAdmin;
     },
     setAuthLogout: (state) => {
       state.isAuthenticated = false;
       state.token = "";
+      state.storeadmin = false;
     },
   },
 });

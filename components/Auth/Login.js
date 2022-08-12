@@ -70,8 +70,13 @@ const Login = () => {
               AsyncStorage.setItem("storeAdmin", "false");
             }
           }
+          console.log("So: ", userDbData.data().storeAdmin);
           dispatch(
-            setAuthLogin({ isAuthenticated: true, token: user.user.uid })
+            setAuthLogin({
+              isAuthenticated: true,
+              token: user.user.uid,
+              storeAdmin: userDbData.data().storeAdmin,
+            })
           );
           console.log("User: ", user.user.uid);
           AsyncStorage.setItem("token", user.user.uid);

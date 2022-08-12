@@ -65,7 +65,7 @@ const Map = () => {
       );
       return;
     }
-    Navigation.navigate("sell", {
+    Navigation.navigate("sellUsedItem", {
       confirmedLat: selectedLocation.lat,
       confirmedLng: selectedLocation.lng,
     });

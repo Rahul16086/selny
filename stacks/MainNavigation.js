@@ -13,7 +13,6 @@ const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  console.log("From App: ", isAuthenticated);
 
   return (
     <Stack.Navigator initialRouteName="login">

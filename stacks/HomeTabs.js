@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Cart from "../screens/Cart";
-import SellItem from "../screens/SellItem";
 import HomeStackScreen from "./HomeStackScreen";
 import ProfileStackScreen from "./ProfileStackScreen";
 import homeIcon from "../assets/icons/HomeIcon.png";

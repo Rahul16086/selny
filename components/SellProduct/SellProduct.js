@@ -148,7 +148,7 @@ const SellProduct = () => {
           };
 
           await setDoc(doc(db, "itemsToSell/" + v4()), finalInfo);
-          Navigation.navigate("managePost");
+          Navigation.navigate("profileStack", { screen: "managePost" });
           setLoading(false);
         } catch (error) {
           console.log(error);
