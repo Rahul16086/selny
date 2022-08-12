@@ -33,6 +33,11 @@ const ManagePosts = () => {
       setLoading(false);
     };
     getUsedItems();
+
+    return () => {
+      setUsedItems([]);
+      setLoading(false);
+    };
   }, [isFocused]);
 
   return (

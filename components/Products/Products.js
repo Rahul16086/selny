@@ -41,6 +41,15 @@ const Products = ({ navigation }) => {
       });
       setLoading(false);
     };
+    getNewItems();
+
+    return () => {
+      setUsedItemsData([]);
+      setLoading(false);
+    };
+  }, [isFocused]);
+
+  useEffect(() => {
     const getUsedItems = async () => {
       setLoading(true);
       const docs = await getDocs(collection(db, "itemsToSell"));
@@ -52,12 +61,18 @@ const Products = ({ navigation }) => {
             setUsedItemsData(itemData);
             setLoading(false);
           }
+          console.log("itemData", itemData);
+          setUsedItemsData(itemData);
         });
       }
       setLoading(false);
     };
-    getNewItems();
     getUsedItems();
+
+    return () => {
+      setUsedItemsData([]);
+      setLoading(false);
+    };
   }, [isFocused]);
 
   return (

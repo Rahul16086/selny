@@ -1,29 +1,15 @@
 import { View, Text, Pressable, Image, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TextBold18 from "../Text/TextBold18";
 import goArrow from "../../../assets/icons/GoArrow.png";
 import Text12 from "../Text/Text12";
 import Text20 from "../Text/Text20";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const ItemBanner = ({ item }) => {
-  const [storeAdmin, setStoreAdmin] = useState(false);
   const Navigation = useNavigation();
-
-  useEffect(() => {
-    let adminStatus = true;
-    const getStoreAdmin = async () => {
-      const status = await AsyncStorage.getItem("storeAdmin");
-      if (adminStatus) {
-        setStoreAdmin(status);
-      }
-    };
-    getStoreAdmin();
-    return () => {
-      adminStatus = false;
-    };
-  }, []);
+  const storeAdmin = useSelector((state) => state.user.storeAdmin);
 
   const styles = StyleSheet.create({
     container: {
