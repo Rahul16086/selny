@@ -6,7 +6,7 @@ import TransparentButton from "../UI/Buttons/TransparentButton";
 import TextBold18 from "../UI/Text/TextBold18";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useState, React } from "react";
 import { useDispatch } from "react-redux";
 import { setAuthLogin } from "../../store/redux/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -48,12 +48,17 @@ const Login = () => {
   const submitHandler = async () => {
     const validate = inputValidator(loginInputValues);
     if (validate === true) {
+      console.log(
+        "email: " + loginInputValues.email,
+        "password: " + loginInputValues.password
+      );
       try {
         const user = await signInWithEmailAndPassword(
           auth,
           loginInputValues.email,
           loginInputValues.password
         );
+
         if (user) {
           const userId = user.user.uid;
           const currentUserRef = doc(db, "users", userId);
@@ -77,7 +82,7 @@ const Login = () => {
     } else {
       Alert.alert(
         "Error logging in",
-        validate ? validate : "Please check the details entered"
+        validate || "Please check the details entered"
       );
     }
   };
@@ -97,7 +102,9 @@ const Login = () => {
           secureTextEntry
           onChangeText={inputChangedHandler.bind(this, "password")}
         />
-        <YellowButton onPress={submitHandler}>Login</YellowButton>
+        <YellowButton onPress={submitHandler} testID={"loginButton"}>
+          Login
+        </YellowButton>
         <TransparentButton onPress={() => navigation.navigate("resetPassword")}>
           Forgot Password?
         </TransparentButton>
@@ -113,6 +120,7 @@ const Login = () => {
         </Pressable>
         <YellowButton
           onPress={() => navigation.navigate("signUp", { signUp: true })}
+          testID={"signUpButton"}
         >
           Create Account
         </YellowButton>
@@ -141,7 +149,7 @@ export const styles = StyleSheet.create({
     marginVertical: 10,
     elevation: 10,
     backgroundColor: "white",
-    //ios
+    // ios
     shadowColor: "#171717",
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
