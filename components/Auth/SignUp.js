@@ -7,7 +7,10 @@ import { styles } from "./Login";
 import logo from "../../assets/Logo.png";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { auth } from "../../config/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 
@@ -16,7 +19,8 @@ const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/; //looks
 const SignUp = () => {
   const Navigation = useNavigation();
   const Route = useRoute();
-
+  const { storeAdmin } = Route.params;
+  console.log("storeAdmin: ", storeAdmin);
   const [signUpInputValues, setSignUpInputValues] = useState({
     fullName: "",
     email: "",
@@ -66,15 +70,16 @@ const SignUp = () => {
         if (signUp) {
           console.log("sending...", auth.currentUser.email);
           let docRef = doc(db, "users", auth.currentUser.uid);
-          const storeAdmin = !Route.params.signUp;
 
           await setDoc(docRef, {
             full_name: signUpInputValues.fullName,
             email: signUpInputValues.email,
             storeAdmin: storeAdmin,
           });
-          // const email = await sendEmailVerification(auth.currentUser);
-          if (Route.params.signUp === false) {
+          if (auth.currentUser) {
+            await sendEmailVerification(auth.currentUser);
+          }
+          if (storeAdmin) {
             Navigation.navigate("sellerAdditionalInfo");
           } else {
             Navigation.navigate("signUpSuccess");
@@ -119,7 +124,7 @@ const SignUp = () => {
           value={signUpInputValues.confirmPassword}
         />
         <YellowButton onPress={submitHandler}>
-          {Route.params.signUp ? "Create Account" : "Next"}
+          {!storeAdmin ? "Create Account" : "Next"}
         </YellowButton>
         <YellowButton onPress={() => Navigation.goBack()}>
           Back to login

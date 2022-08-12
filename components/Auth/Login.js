@@ -119,13 +119,13 @@ const Login = () => {
           <Image source={googleLogo} />
         </Pressable>
         <YellowButton
-          onPress={() => navigation.navigate("signUp", { signUp: true })}
+          onPress={() => navigation.navigate("signUp", { storeAdmin: false })}
           testID={"signUpButton"}
         >
           Create Account
         </YellowButton>
         <YellowButton
-          onPress={() => navigation.navigate("signUp", { signUp: false })}
+          onPress={() => navigation.navigate("signUp", { storeAdmin: true })}
         >
           Register as Seller
         </YellowButton>
