@@ -15,7 +15,7 @@ const ProductDetails = () => {
   const [imagesLinks, setImagesLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const Route = useRoute();
-  const { item, editMode = false, usedItem = false } = Route.params;
+  const { item, editMode = false, usedItem } = Route.params;
   const Navigation = useNavigation();
 
   useEffect(() => {
@@ -116,21 +116,25 @@ const ProductDetails = () => {
           <YellowButton width={"90%"}>Add to cart</YellowButton>
           <OrangeButton
             width={"90%"}
-            onPress={() =>
-              Navigation.navigate("placeOrder", {
-                itemName: `${
-                  currentItemData.brand
-                    ? currentItemData.brand + " " + currentItemData.item_name
-                    : currentItemData.item_name
-                }`,
-                itemQuantity: currentItemData.quantity_left || 1,
-                itemPrice: currentItemData?.price,
-                itemId: currentItemData.id,
-                storeId: currentItemData.storeId
-                  ? currentItemData.storeId
-                  : null,
-              })
-            }
+            onPress={() => {
+              usedItem
+                ? Alert.alert("Notified", "The seller has been notified")
+                : Navigation.navigate("placeOrder", {
+                    itemName: `${
+                      currentItemData.brand
+                        ? currentItemData.brand +
+                          " " +
+                          currentItemData.item_name
+                        : currentItemData.item_name
+                    }`,
+                    itemQuantity: currentItemData.quantity_left || 1,
+                    itemPrice: currentItemData?.price,
+                    itemId: currentItemData.id,
+                    storeId: currentItemData.storeId
+                      ? currentItemData.storeId
+                      : null,
+                  });
+            }}
           >
             Buy now
           </OrangeButton>
