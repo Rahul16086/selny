@@ -8,12 +8,14 @@ import MyOrdersDetailedView from "../screens/MyOrdersDetailedView";
 import MyProfile from "../screens/MyProfile";
 import Profile from "../screens/Profile";
 import ManageOrdersScreen from "../screens/ManageOrdersScreen";
+import { useSelector } from "react-redux";
 
 const ProfileStack = createNativeStackNavigator();
 
-function ProfileStackScreen() {
+const ProfileStackScreen = () => {
+  const storeAdmin = useSelector((state) => state.user.storeAdmin);
   return (
-    <ProfileStack.Navigator>
+    <ProfileStack.Navigator initialRouteName="profile">
       <ProfileStack.Screen
         name="profile"
         component={Profile}
@@ -49,18 +51,22 @@ function ProfileStackScreen() {
         component={AddStore}
         options={{ headerShown: false }}
       />
-      <ProfileStack.Screen
-        name="manageStoreItems"
-        component={ManageStoreItems}
-        options={{ headerShown: false }}
-      />
-      <ProfileStack.Screen
-        name="manageOrders"
-        component={ManageOrdersScreen}
-        options={{ headerShown: false }}
-      />
+      {storeAdmin && (
+        <ProfileStack.Screen
+          name="manageStoreItems"
+          component={ManageStoreItems}
+          options={{ headerShown: false }}
+        />
+      )}
+      {storeAdmin && (
+        <ProfileStack.Screen
+          name="manageOrders"
+          component={ManageOrdersScreen}
+          options={{ headerShown: false }}
+        />
+      )}
     </ProfileStack.Navigator>
   );
-}
+};
 
 export default ProfileStackScreen;

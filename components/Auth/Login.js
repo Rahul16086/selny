@@ -48,10 +48,6 @@ const Login = () => {
   const submitHandler = async () => {
     const validate = inputValidator(loginInputValues);
     if (validate === true) {
-      console.log(
-        "email: " + loginInputValues.email,
-        "password: " + loginInputValues.password
-      );
       try {
         const user = await signInWithEmailAndPassword(
           auth,
@@ -61,6 +57,13 @@ const Login = () => {
 
         if (user) {
           const userId = user.user.uid;
+          if (!user.user.emailVerified) {
+            Alert.alert(
+              "Email not verified",
+              "Please verify your email before logging in"
+            );
+            return;
+          }
           const currentUserRef = doc(db, "users", userId);
           const userDbData = await getDoc(currentUserRef);
           if (userDbData.exists()) {

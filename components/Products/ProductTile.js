@@ -4,7 +4,7 @@ import productImage from "../../assets/productImage1.png";
 import Text12 from "../UI/Text/Text12";
 import TextBold18 from "../UI/Text/TextBold18";
 
-const ProductTile = ({ item }) => {
+const ProductTile = ({ item, usedItem }) => {
   const navigation = useNavigation();
 
   return (
@@ -15,6 +15,7 @@ const ProductTile = ({ item }) => {
         navigation.navigate("productDetails", {
           item: item,
           editMode: item.editMode ? true : false,
+          usedItem: usedItem ? true : false,
         })
       }
     >

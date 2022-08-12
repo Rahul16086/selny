@@ -7,7 +7,7 @@ import bellIcon from "../../assets/icons/BellIcon.png";
 import RedShadowButton from "../UI/Buttons/RedShadowButton";
 import ShadowIconButton from "../UI/Buttons/ShadowIconButton";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuthLogout } from "../../store/redux/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signOut } from "firebase/auth";
@@ -31,7 +31,8 @@ const ProfileMain = () => {
   };
 
   const [user, setUser] = useState(null);
-  const [storeAdmin, setStoreAdmin] = useState(false);
+  const storeAdmin = useSelector((state) => state.user.storeAdmin);
+  console.log(storeAdmin);
   useEffect(() => {
     const getUser = async () => {
       setLoading(true);
@@ -40,9 +41,6 @@ const ProfileMain = () => {
       const userDbData = await getDoc(currentUserRef);
       if (userDbData.exists()) {
         setUser(userDbData.data());
-        if (userDbData.data().storeAdmin) {
-          setStoreAdmin(true);
-        }
         setLoading(false);
       }
       setLoading(false);

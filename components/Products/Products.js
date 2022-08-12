@@ -122,7 +122,7 @@ const Products = ({ navigation }) => {
       {!newItemsToggle && !loading && (
         <View style={{ flex: 1 }}>
           {usedItemsData.length > 0 ? (
-            <ProductList productInfo={usedItemsData} navigation={navigation} />
+            <ProductList productInfo={usedItemsData} usedItem={true} />
           ) : (
             <View
               style={{
