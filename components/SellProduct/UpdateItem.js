@@ -7,6 +7,7 @@ import YellowButton from "../UI/Buttons/YellowButton";
 import Spinner from "react-native-loading-spinner-overlay";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
+import { useSelector } from "react-redux";
 
 const UpdateItem = () => {
   const Route = useRoute();
@@ -14,6 +15,7 @@ const UpdateItem = () => {
   const { item, usedItem } = Route.params;
   const [itemInfo, setItemInfo] = useState(item);
   const [loading, setLoading] = useState(false);
+  const storeAdmin = useSelector((state) => state.user.storeAdmin);
 
   const inputChangeHandler = (input, value) => {
     setItemInfo({ ...itemInfo, [input]: value });
@@ -26,6 +28,7 @@ const UpdateItem = () => {
         doc(db, `${usedItem ? "itemsToSell" : "newItems"}`, itemInfo.id),
         { ...itemInfo }
       );
+      Navigation.navigate("profile");
       Navigation.navigate("home");
       setLoading(false);
     } catch (error) {
@@ -82,7 +85,11 @@ const UpdateItem = () => {
               />
             </>
           )}
-          <YellowButton onPress={() => Navigation.navigate("manageStores")}>
+          <YellowButton
+            onPress={() =>
+              Navigation.navigate(storeAdmin ? "manageStores" : "managePost")
+            }
+          >
             Cancel
           </YellowButton>
           <YellowButton onPress={updateHandler}>Update</YellowButton>

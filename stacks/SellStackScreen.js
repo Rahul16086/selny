@@ -1,7 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useIsFocused } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import UpdateItem from "../components/SellProduct/UpdateItem";
 import MapView from "../screens/MapView";
@@ -14,7 +11,9 @@ const SellStackScreen = () => {
   const storeAdmin = useSelector((state) => state.user.storeAdmin);
 
   return (
-    <SellStack.Navigator>
+    <SellStack.Navigator
+      initialRouteName={storeAdmin ? "sellNewItem" : "sellUsedItem"}
+    >
       {!storeAdmin && (
         <SellStack.Screen
           name="sellUsedItem"
@@ -29,11 +28,6 @@ const SellStackScreen = () => {
           options={{ headerShown: false }}
         />
       )}
-      <SellStack.Screen
-        name="updateItem"
-        component={UpdateItem}
-        options={{ headerShown: false }}
-      ></SellStack.Screen>
       <SellStack.Screen
         name="mapView"
         component={MapView}

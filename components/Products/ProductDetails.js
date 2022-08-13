@@ -9,6 +9,7 @@ import Spinner from "react-native-loading-spinner-overlay/lib";
 import { deleteDoc, doc } from "firebase/firestore";
 import { auth, db, storage } from "../../config/firebase";
 import { deleteObject, ref } from "firebase/storage";
+import { useSelector } from "react-redux";
 
 const ProductDetails = () => {
   const [currentItemData, setCurrentItemData] = useState({});
@@ -17,6 +18,7 @@ const ProductDetails = () => {
   const Route = useRoute();
   const { item, editMode = false, usedItem } = Route.params;
   const Navigation = useNavigation();
+  const storeAdmin = useSelector((state) => state.user.storeAdmin);
 
   useEffect(() => {
     setLoading(true);
@@ -113,8 +115,11 @@ const ProductDetails = () => {
       </View>
       {!editMode && (
         <View style={styles.buttonContainer}>
-          <YellowButton width={"90%"}>Add to cart</YellowButton>
+          <YellowButton width={"90%"} disabled={storeAdmin}>
+            Add to cart
+          </YellowButton>
           <OrangeButton
+            disabled={storeAdmin}
             width={"90%"}
             onPress={() => {
               usedItem
@@ -145,7 +150,7 @@ const ProductDetails = () => {
           <YellowButton
             width={"90%"}
             onPress={() =>
-              Navigation.navigate("sellStack", {
+              Navigation.navigate("profileStack", {
                 screen: "updateItem",
                 params: {
                   item: item,

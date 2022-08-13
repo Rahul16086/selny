@@ -94,6 +94,7 @@ const SellProduct = () => {
       const permissionResponse = await requestPermission();
       return permissionResponse.granted;
     }
+    console.log(locationPermissionInformation);
     if (locationPermissionInformation.status === PermissionStatus.DENIED) {
       Alert.alert("Location permission denied");
       return false;

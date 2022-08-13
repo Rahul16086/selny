@@ -20,7 +20,6 @@ const SignUp = () => {
   const Navigation = useNavigation();
   const Route = useRoute();
   const { storeAdmin } = Route.params;
-  console.log("storeAdmin: ", storeAdmin);
   const [signUpInputValues, setSignUpInputValues] = useState({
     fullName: "",
     email: "",

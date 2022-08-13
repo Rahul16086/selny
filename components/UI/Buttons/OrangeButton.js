@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from "react-native";
 import TextBold18 from "../Text/TextBold18";
 
-const OrangeButton = ({ width, onPress, uppercase, children }) => {
+const OrangeButton = ({ width, onPress, uppercase, children, disabled }) => {
   const styles = StyleSheet.create({
     buttonTouch: {
       width: width ? width : "100%",
@@ -18,6 +18,7 @@ const OrangeButton = ({ width, onPress, uppercase, children }) => {
       android_ripple={{ color: "#ffffff" }}
       style={styles.buttonTouch}
       onPress={onPress}
+      disabled={disabled}
     >
       <TextBold18 uppercase={uppercase}>{children}</TextBold18>
     </Pressable>

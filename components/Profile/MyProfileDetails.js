@@ -9,6 +9,7 @@ import YellowButton from "../UI/Buttons/YellowButton";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const MyProfileDetails = () => {
   const [userDetails, setUserDetails] = useState({
@@ -134,6 +135,7 @@ const MyProfileDetails = () => {
       alignItems: "center",
       width: "100%",
       marginVertical: 5,
+      overflow: "hidden",
     },
     nameTextInput: {
       borderWidth: 1,

@@ -9,6 +9,7 @@ import MyProfile from "../screens/MyProfile";
 import Profile from "../screens/Profile";
 import ManageOrdersScreen from "../screens/ManageOrdersScreen";
 import { useSelector } from "react-redux";
+import UpdateItem from "../components/SellProduct/UpdateItem";
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -41,16 +42,20 @@ const ProfileStackScreen = () => {
         component={ManagePost}
         options={{ headerShown: false }}
       />
-      <ProfileStack.Screen
-        name="manageStores"
-        component={ManageStores}
-        options={{ headerShown: false }}
-      />
-      <ProfileStack.Screen
-        name="addStore"
-        component={AddStore}
-        options={{ headerShown: false }}
-      />
+      {storeAdmin && (
+        <ProfileStack.Screen
+          name="manageStores"
+          component={ManageStores}
+          options={{ headerShown: false }}
+        />
+      )}
+      {storeAdmin && (
+        <ProfileStack.Screen
+          name="addStore"
+          component={AddStore}
+          options={{ headerShown: false }}
+        />
+      )}
       {storeAdmin && (
         <ProfileStack.Screen
           name="manageStoreItems"
@@ -65,6 +70,11 @@ const ProfileStackScreen = () => {
           options={{ headerShown: false }}
         />
       )}
+      <ProfileStack.Screen
+        name="updateItem"
+        component={UpdateItem}
+        options={{ headerShown: false }}
+      ></ProfileStack.Screen>
     </ProfileStack.Navigator>
   );
 };

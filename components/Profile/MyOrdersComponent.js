@@ -11,6 +11,11 @@ const MyOrdersComponent = () => {
       marginTop: StatusBar.currentHeight,
       width: "100%",
     },
+    noOrders: {
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100%",
+    },
   });
   const [ordersData, setOrdersData] = useState([]);
 
@@ -34,23 +39,32 @@ const MyOrdersComponent = () => {
   }, []);
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 30,
-        }}
-      >
-        <TextBold18>My Orders</TextBold18>
-      </View>
-      <FlatList
-        data={ordersData}
-        renderItem={({ item }) => <OrdersBanner data={item} />}
-        contentContainerStyle={{
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      />
+      {ordersData.length === 0 && (
+        <View style={styles.noOrders}>
+          <TextBold18>No orders places :(</TextBold18>
+        </View>
+      )}
+      {ordersData.length > 0 && (
+        <>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginVertical: 30,
+            }}
+          >
+            <TextBold18>My Orders</TextBold18>
+          </View>
+          <FlatList
+            data={ordersData}
+            renderItem={({ item }) => <OrdersBanner data={item} />}
+            contentContainerStyle={{
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          />
+        </>
+      )}
     </View>
   );
 };
