@@ -6,14 +6,21 @@ import TransparentButton from "../UI/Buttons/TransparentButton";
 import TextBold18 from "../UI/Text/TextBold18";
 import TextInputGrey from "../UI/Input/TextInputGrey";
 import { useNavigation } from "@react-navigation/native";
-import { useState, React } from "react";
+import { useState, React, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setAuthLogin } from "../../store/redux/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { signInWithEmailAndPassword } from "firebase/auth";
-
-import { doc, getDoc } from "firebase/firestore";
+import {
+  GoogleAuthProvider,
+  signInWithCredential,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const Login = () => {
   const navigation = useNavigation();
@@ -22,6 +29,68 @@ const Login = () => {
     password: "",
   });
   const dispatch = useDispatch();
+
+  const [accessToken, setAccessToken] = useState();
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId:
+      "148515178432-t68nfq2f1p5gpgc38f582bf3ng8eb5gk.apps.googleusercontent.com",
+  });
+
+  useEffect(() => {
+    const googleSignInHandler = async () => {
+      if (response?.type === "success") {
+        const { access_token } = response.params;
+        const credential = GoogleAuthProvider.credential(null, access_token);
+        try {
+          const user = await signInWithCredential(auth, credential);
+          const userId = user.user.uid;
+          const currentUserRef = doc(db, "users", userId);
+          const userDbData = await getDoc(currentUserRef);
+          if (userDbData.exists()) {
+            dispatch(
+              setAuthLogin({
+                isAuthenticated: true,
+                token: user.user.uid,
+                storeAdmin: userDbData.data().storeAdmin,
+              })
+            );
+            AsyncStorage.setItem("token", user.user.uid);
+          } else {
+            await setDoc(doc(db, "users", user.user.uid), {
+              email: user.user.email,
+              name: user.user.displayName,
+              storeAdmin: false,
+            });
+            dispatch(
+              setAuthLogin({
+                isAuthenticated: true,
+                token: user.user.uid,
+                storeAdmin: false,
+              })
+            );
+            AsyncStorage.setItem("token", user.user.uid);
+          }
+          setAccessToken(response.authentication.accessToken);
+        } catch (error) {
+          console.log(error);
+          Alert.alert("Error", error.message);
+        }
+      }
+    };
+    googleSignInHandler();
+  }, [response]);
+
+  const getUserData = async () => {
+    let userInfoResponse = await fetch(
+      "https://www.googleapis.com/userinfo/v2/me",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    let userData = await userInfoResponse.json();
+  };
 
   const inputChangedHandler = (inputIdentifier, enteredValue) => {
     setLoginInputValues((currentInputValue) => {
@@ -66,14 +135,6 @@ const Login = () => {
           }
           const currentUserRef = doc(db, "users", userId);
           const userDbData = await getDoc(currentUserRef);
-          if (userDbData.exists()) {
-            if (userDbData.data().storeAdmin) {
-              AsyncStorage.setItem("storeAdmin", "true");
-            } else {
-              AsyncStorage.setItem("storeAdmin", "false");
-            }
-          }
-          console.log("So: ", userDbData.data().storeAdmin);
           dispatch(
             setAuthLogin({
               isAuthenticated: true,
@@ -81,7 +142,6 @@ const Login = () => {
               storeAdmin: userDbData.data().storeAdmin,
             })
           );
-          console.log("User: ", user.user.uid);
           AsyncStorage.setItem("token", user.user.uid);
         }
       } catch (error) {
@@ -96,7 +156,11 @@ const Login = () => {
   };
 
   const googleLoginHandler = () => {
-    console.log("Pressed");
+    if (accessToken) {
+      getUserData();
+    } else {
+      promptAsync({ showInRecents: true });
+    }
   };
 
   return (

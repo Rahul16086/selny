@@ -32,7 +32,7 @@ const ProfileMain = () => {
 
   const [user, setUser] = useState(null);
   const storeAdmin = useSelector((state) => state.user.storeAdmin);
-  console.log(storeAdmin);
+
   useEffect(() => {
     const getUser = async () => {
       setLoading(true);

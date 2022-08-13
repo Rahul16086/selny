@@ -61,7 +61,6 @@ const Products = ({ navigation }) => {
             setUsedItemsData(itemData);
             setLoading(false);
           }
-          console.log("itemData", itemData);
           setUsedItemsData(itemData);
         });
       }
